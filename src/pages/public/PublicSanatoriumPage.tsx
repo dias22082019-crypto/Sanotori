@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LoadingScreen } from "@/components/states/LoadingScreen";
 import { ErrorState } from "@/components/states/ErrorState";
+import { PublicBookingSection } from "@/features/bookings/PublicBookingSection";
 
 /**
  * /s/:slug — публичная страница санатория. Данные приходят из get_public_sanatorium():
@@ -88,7 +89,7 @@ export function PublicSanatoriumPage() {
               <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-foreground/90">{s.description}</p>
             </>
           )}
-          <p className="mt-8 rounded-lg border border-dashed bg-card p-4 text-sm text-muted-foreground">{t("public.roomsSoon")}</p>
+          <PublicBookingSection slug={s.slug} />
         </div>
         <aside className="h-fit rounded-lg border bg-card p-5">
           <h2 className="font-semibold">{t("public.contacts")}</h2>

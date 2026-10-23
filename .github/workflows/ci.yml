@@ -40,4 +40,4 @@ jobs:
       - name: Migrations and RLS tests
         run: ./supabase/tests/run_local.sh
       - name: setup_all.sql is up to date
-        run: ./scripts/build-setup-sql.sh && git diff --exit-code supabase/setup_all.sql
+        run: ./scripts/build-setup-sql.sh && git add -N supabase && git diff --exit-code supabase/setup_all.sql supabase/updates
