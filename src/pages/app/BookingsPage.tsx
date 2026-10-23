@@ -1,0 +1,132 @@
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { ClipboardList, Plus } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { formatDate, formatKzt, todayInTimeZone, type AppLanguage } from "@/lib/format";
+import { BOOKING_SELECT, bookingStatusVariant, type Booking } from "@/lib/bookings";
+import { cn } from "@/lib/utils";
+import { useOrg } from "@/auth/OrgProvider";
+import { PageHeader } from "@/components/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/states/EmptyState";
+import { ErrorState } from "@/components/states/ErrorState";
+import { BookingDialog } from "@/features/bookings/BookingDialog";
+import { BookingDetailsDialog } from "@/features/bookings/BookingDetailsDialog";
+import { useRooms, useRoomTypes } from "./RoomsPage";
+
+const TABS = ["requests", "arrivals", "in_house", "upcoming", "all"] as const;
+type Tab = (typeof TABS)[number];
+
+/** Список бронирований с вкладками: заявки, заезды сегодня, проживают, предстоящие, все */
+export function BookingsPage() {
+  const { t, i18n } = useTranslation();
+  const lang = (i18n.language === "kk" ? "kk" : "ru") as AppLanguage;
+  const { org, can, writable } = useOrg();
+  const today = todayInTimeZone(org.timezone);
+  const [params, setParams] = useSearchParams();
+  const tab = (TABS as readonly string[]).includes(params.get("tab") ?? "") ? (params.get("tab") as Tab) : "upcoming";
+  const [creating, setCreating] = useState(false);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [editing, setEditing] = useState<Booking | null>(null);
+
+  const types = useRoomTypes(org.id);
+  const rooms = useRooms(org.id);
+  const bookings = useQuery({
+    queryKey: ["bookings", org.id, tab, today],
+    queryFn: async () => {
+      let q = supabase.from("bookings").select(BOOKING_SELECT).eq("tenant_id", org.id);
+      if (tab === "requests") q = q.eq("status", "new_request").order("created_at", { ascending: false });
+      if (tab === "arrivals") q = q.eq("status", "confirmed").eq("check_in", today).order("number");
+      if (tab === "in_house") q = q.eq("status", "checked_in").order("check_out");
+      if (tab === "upcoming") q = q.eq("status", "confirmed").gte("check_in", today).order("check_in");
+      if (tab === "all") q = q.order("check_in", { ascending: false });
+      const { data, error } = await q.limit(200);
+      if (error) throw error;
+      return data as unknown as Booking[];
+    },
+  });
+
+  const roomNumber = (id: string | null) => rooms.data?.find((r) => r.id === id)?.number;
+  const typeName = (id: string) => types.data?.find((x) => x.id === id)?.name ?? "";
+  const opened = bookings.data?.find((b) => b.id === openId) ?? null;
+  const canCreate = can("bookings.write") && writable && (types.data?.length ?? 0) > 0;
+
+  return (
+    <>
+      <PageHeader
+        title={t("bookings.title")}
+        actions={canCreate && <Button onClick={() => setCreating(true)}><Plus /> {t("bookings.new")}</Button>}
+      />
+
+      <div className="-mx-4 mb-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+        <div role="tablist" className="inline-flex gap-1 rounded-lg bg-muted p-1">
+          {TABS.map((key) => (
+            <button key={key} role="tab" aria-selected={tab === key}
+              className={cn("whitespace-nowrap rounded-md px-3 py-1.5 text-sm", tab === key ? "bg-card font-medium shadow-sm" : "text-muted-foreground hover:text-foreground")}
+              onClick={() => setParams({ tab: key }, { replace: true })}>
+              {t(`bookings.tabs.${key}`)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {bookings.isLoading || types.isLoading ? (
+        <div className="grid gap-2">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-12" />)}</div>
+      ) : bookings.error ? (
+        <ErrorState error={bookings.error} onRetry={() => bookings.refetch()} />
+      ) : bookings.data!.length === 0 ? (
+        <EmptyState icon={<ClipboardList className="h-5 w-5" />} title={t(`bookings.empty.${tab}`)}
+          text={(types.data?.length ?? 0) === 0 ? t("bookings.needRooms") : undefined} />
+      ) : (
+        <Card>
+          <CardContent className="pt-5">
+            <div className="-mx-5 overflow-x-auto">
+              <table className="w-full min-w-[720px] text-sm">
+                <thead>
+                  <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
+                    <th className="px-5 py-2 font-medium">№</th>
+                    <th className="px-5 py-2 font-medium">{t("bookings.fields.guest")}</th>
+                    <th className="px-5 py-2 font-medium">{t("bookings.fields.dates")}</th>
+                    <th className="px-5 py-2 font-medium">{t("bookings.fields.room")}</th>
+                    <th className="px-5 py-2 font-medium">{t("bookings.colStatus")}</th>
+                    <th className="px-5 py-2 text-right font-medium">{t("bookings.total")}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {bookings.data!.map((b) => (
+                    <tr key={b.id} className="cursor-pointer hover:bg-muted/50" onClick={() => setOpenId(b.id)}>
+                      <td className="px-5 py-2.5 text-muted-foreground">{b.number}</td>
+                      <td className="px-5 py-2.5 font-medium">{b.guest?.full_name}</td>
+                      <td className="px-5 py-2.5 whitespace-nowrap">
+                        {formatDate(b.check_in, lang)} — {formatDate(b.check_out, lang)}
+                        <span className="block text-xs text-muted-foreground">{t("bookings.nights", { count: b.nights })}</span>
+                      </td>
+                      <td className="px-5 py-2.5">
+                        {roomNumber(b.room_id) ?? <span className="text-muted-foreground">{t("bookings.noRoomShort")}</span>}
+                        <span className="block text-xs text-muted-foreground">{typeName(b.room_type_id)}</span>
+                      </td>
+                      <td className="px-5 py-2.5"><Badge variant={bookingStatusVariant[b.status]}>{t(`bookings.status.${b.status}`)}</Badge></td>
+                      <td className="px-5 py-2.5 text-right whitespace-nowrap">{formatKzt(b.total_amount, lang)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {creating && types.data && <BookingDialog roomTypes={types.data} onClose={() => setCreating(false)} />}
+      {editing && types.data && <BookingDialog booking={editing} roomTypes={types.data} onClose={() => setEditing(null)} />}
+      {opened && types.data && rooms.data && (
+        <BookingDetailsDialog booking={opened} rooms={rooms.data} roomTypes={types.data}
+          onEdit={() => { setEditing(opened); setOpenId(null); }} onClose={() => setOpenId(null)} />
+      )}
+    </>
+  );
+}

@@ -22,6 +22,10 @@ import { DashboardPage } from "@/pages/app/DashboardPage";
 import { SettingsPage } from "@/pages/app/SettingsPage";
 import { StaffPage } from "@/pages/app/StaffPage";
 import { ModuleSoonPage } from "@/pages/app/ModuleSoonPage";
+import { RoomsPage } from "@/pages/app/RoomsPage";
+import { GuestsPage } from "@/pages/app/GuestsPage";
+import { BookingsPage } from "@/pages/app/BookingsPage";
+import { CalendarPage } from "@/pages/app/CalendarPage";
 import { PublicSanatoriumPage } from "@/pages/public/PublicSanatoriumPage";
 import { AdminPage } from "@/pages/admin/AdminPage";
 import { NotFoundState } from "@/components/states/ErrorState";
@@ -68,6 +72,10 @@ export default function App() {
               <Route index element={<DashboardPage />} />
               <Route path="settings" element={<RequirePermission permission="settings.manage"><SettingsPage /></RequirePermission>} />
               <Route path="staff" element={<RequirePermission permission="members.read"><StaffPage /></RequirePermission>} />
+              <Route path="bookings" element={<RequirePermission permission="bookings.read"><BookingsPage /></RequirePermission>} />
+              <Route path="calendar" element={<RequirePermission permission="bookings.read"><CalendarPage /></RequirePermission>} />
+              <Route path="rooms" element={<RequirePermission permission="rooms.read"><RoomsPage /></RequirePermission>} />
+              <Route path="guests" element={<RequirePermission permission="guests.read"><GuestsPage /></RequirePermission>} />
               {upcomingModules.map((m) => (
                 <Route
                   key={m.key}

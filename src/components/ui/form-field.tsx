@@ -12,7 +12,7 @@ export function FormField(props: {
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("grid gap-1.5", props.className)}>
+    <div className={cn("grid content-start gap-1.5", props.className)}>
       <Label htmlFor={props.id}>{props.label}</Label>
       {props.children}
       {props.error ? (
