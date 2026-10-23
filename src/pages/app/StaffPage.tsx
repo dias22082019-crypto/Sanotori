@@ -21,6 +21,7 @@ import { FormField } from "@/components/ui/form-field";
 import { ConfirmDialog } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/states/EmptyState";
+import { appUrl } from "@/lib/utils";
 import { ErrorState } from "@/components/states/ErrorState";
 
 interface MemberRow {
@@ -103,7 +104,7 @@ export function StaffPage() {
       else toast.error(describeError(error, t));
       return;
     }
-    setInviteLink(`${window.location.origin}/invite/${data as string}`);
+    setInviteLink(appUrl(`/invite/${data as string}`));
     form.reset({ email: "", roleId });
   });
 

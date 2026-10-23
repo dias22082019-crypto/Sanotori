@@ -14,6 +14,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input, NativeSelect, Textarea } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { appUrl } from "@/lib/utils";
 import { FormField } from "@/components/ui/form-field";
 
 type Output = z.output<typeof organizationSettingsSchema>;
@@ -137,7 +138,7 @@ export function SettingsPage() {
                 {t("settings.isPublished", { slug: org.slug })}
               </label>
               {watch("is_published") && org.is_published && (
-                <a className="mt-2 inline-block text-sm text-primary hover:underline" href={`/s/${org.slug}`} target="_blank" rel="noopener noreferrer">
+                <a className="mt-2 inline-block text-sm text-primary hover:underline" href={appUrl(`/s/${org.slug}`)} target="_blank" rel="noopener noreferrer">
                   /s/{org.slug}
                 </a>
               )}

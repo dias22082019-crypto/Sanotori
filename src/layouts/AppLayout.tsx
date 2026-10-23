@@ -7,7 +7,7 @@ import { useAuth } from "@/auth/AuthProvider";
 import { myOrganizationsQuery, useOrg } from "@/auth/OrgProvider";
 import { supabase } from "@/lib/supabase";
 import { formatDate } from "@/lib/format";
-import { cn } from "@/lib/utils";
+import { appUrl, cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
@@ -140,7 +140,7 @@ function UserMenu() {
           <UserRound /> {t("nav.account")}
         </DropdownMenuItem>
         {org.is_published && (
-          <DropdownMenuItem onSelect={() => window.open(`/s/${org.slug}`, "_blank", "noopener")}>
+          <DropdownMenuItem onSelect={() => window.open(appUrl(`/s/${org.slug}`), "_blank", "noopener")}>
             <ExternalLink /> {t("nav.publicPage")}
           </DropdownMenuItem>
         )}

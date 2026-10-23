@@ -27,6 +27,12 @@ cp .env.example .env      # укажите URL и anon key вашего прое
 npm run dev               # http://localhost:8080
 ```
 
+### Публикация на GitHub Pages
+
+После слияния в `main` workflow `.github/workflows/pages.yml` собирает сайт и публикует его на
+`https://dias22082019-crypto.github.io/Sanotori/`. Один раз включите Pages: Settings → Pages → Source: **GitHub Actions**.
+В Supabase (Authentication → URL Configuration) добавьте этот адрес в Site URL и `https://dias22082019-crypto.github.io/Sanotori/**` в Redirect URLs.
+
 ### База данных
 
 1. Создайте проект Supabase (или используйте Lovable Cloud).

@@ -5,6 +5,7 @@ import { MailCheck } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { describeError } from "@/lib/errors";
 import { AuthLayout } from "@/layouts/AuthLayout";
+import { appUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export function VerifyEmailPage() {
@@ -19,7 +20,7 @@ export function VerifyEmailPage() {
     const { error } = await supabase.auth.resend({
       type: "signup",
       email: state.email,
-      options: { emailRedirectTo: `${window.location.origin}/onboarding` },
+      options: { emailRedirectTo: appUrl("/onboarding") },
     });
     setSending(false);
     setStatus(error ? { ok: false, text: describeError(error, t) } : { ok: true, text: t("auth.resent") });

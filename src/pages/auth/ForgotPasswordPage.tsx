@@ -10,6 +10,7 @@ import { describeError } from "@/lib/errors";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { appUrl } from "@/lib/utils";
 import { FormField } from "@/components/ui/form-field";
 
 const schema = z.object({ email: emailSchema });
@@ -24,7 +25,7 @@ export function ForgotPasswordPage() {
   });
 
   const onSubmit = handleSubmit(async ({ email }) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: appUrl("/reset-password") });
     // Одинаковый ответ для существующих и несуществующих адресов: не раскрываем, кто зарегистрирован
     setResult(error && error.status === 429 ? { ok: false, text: describeError(error, t) } : { ok: true, text: t("auth.forgotSent") });
   });

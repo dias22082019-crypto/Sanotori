@@ -11,6 +11,7 @@ import { AuthLayout } from "@/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { appUrl } from "@/lib/utils";
 import { FormField } from "@/components/ui/form-field";
 
 type Values = z.input<typeof registerSchema>;
@@ -30,7 +31,7 @@ export function RegisterPage() {
       email: values.email,
       password: values.password,
       options: {
-        emailRedirectTo: `${window.location.origin}/onboarding`,
+        emailRedirectTo: appUrl("/onboarding"),
         data: { full_name: values.fullName, preferred_language: i18n.language },
       },
     });
