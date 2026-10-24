@@ -66,7 +66,7 @@ interface Invoice {
 
 /** Модули тарифа в том порядке, в котором их удобно сравнивать */
 /** Модули тарифа, которые ещё в разработке: показываем честно, с пометкой «скоро» */
-const SOON_FEATURES = new Set(["integrations", "custom_roles", "branches"]);
+const SOON_FEATURES = new Set(["custom_roles", "branches"]);
 const FEATURE_ORDER = ["rooms", "guests", "bookings", "public_site", "finance", "procedures", "tasks", "inventory",
   "analytics", "integrations", "marketing", "custom_roles", "branches"];
 

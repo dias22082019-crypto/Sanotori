@@ -16,6 +16,7 @@ import { Input, NativeSelect, Textarea } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { appUrl } from "@/lib/utils";
 import { FormField } from "@/components/ui/form-field";
+import { WhatsappSettingsCard } from "@/features/messages/WhatsappSettingsCard";
 
 type Output = z.output<typeof organizationSettingsSchema>;
 
@@ -43,11 +44,15 @@ export function SettingsPage() {
       timezone: org.timezone,
       default_language: org.default_language,
       is_published: org.is_published,
+      kaspi_pay_url: org.kaspi_pay_url ?? "",
     },
   });
 
   const onSubmit = handleSubmit(async (values) => {
-    const { error, data } = await supabase.from("organizations").update(values).eq("id", org.id).select("id");
+    // до применения обновления 0012 колонки kaspi_pay_url нет — не отправляем её, чтобы остальное сохранялось
+    const { kaspi_pay_url, ...rest } = values;
+    const payload = "kaspi_pay_url" in org ? { ...rest, kaspi_pay_url } : rest;
+    const { error, data } = await supabase.from("organizations").update(payload).eq("id", org.id).select("id");
     if (error || !data?.length) {
       toast.error(describeError(error ?? { code: "42501" }, t));
       return;
@@ -128,6 +133,20 @@ export function SettingsPage() {
 
           <Card>
             <CardHeader>
+              <CardTitle>{t("kaspi.settingsTitle")}</CardTitle>
+              <CardDescription>{t("kaspi.settingsHint")}</CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-2">
+              <FormField id="kaspi_pay_url" label={t("kaspi.urlLabel")} error={err(e.kaspi_pay_url?.message)}>
+                <Input id="kaspi_pay_url" type="url" inputMode="url" placeholder="https://pay.kaspi.kz/pay/…"
+                  readOnly={!("kaspi_pay_url" in org)} {...register("kaspi_pay_url")} />
+              </FormField>
+              {!("kaspi_pay_url" in org) && <p className="text-xs text-warning">{t("kaspi.needsUpdate")}</p>}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>{t("settings.publicSection")}</CardTitle>
               <CardDescription>{t("settings.isPublishedHint")}</CardDescription>
             </CardHeader>
@@ -152,6 +171,7 @@ export function SettingsPage() {
           )}
         </fieldset>
       </form>
+      <WhatsappSettingsCard />
     </>
   );
 }

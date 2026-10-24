@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
+import { Copy, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
-import { formatDateTime, formatKzt, type AppLanguage } from "@/lib/format";
+import { formatDateTime, formatKzt, whatsappLink, type AppLanguage } from "@/lib/format";
+import { copyText, kaspiPaymentText } from "@/lib/whatsapp";
 import type { Booking } from "@/lib/bookings";
 import {
   PAYMENT_METHODS, describeFinanceError, parseAmount,
@@ -133,6 +134,7 @@ export function BookingPayments({ booking }: { booking: Booking }) {
         </dl>
       )}
       {!active && seesPayments && due < 0 && <p className="mt-1 text-xs text-muted-foreground">{t("finance.cancelledHint")}</p>}
+      {org.kaspi_pay_url && active && seesPayments && due > 0 && <KaspiPayment booking={booking} url={org.kaspi_pay_url} due={due} />}
 
       {(extras.data?.length ?? 0) > 0 && (
         <ul className="mt-3 divide-y rounded-md border text-sm">
@@ -211,5 +213,33 @@ export function BookingPayments({ booking }: { booking: Booking }) {
         </div>
       )}
     </section>
+  );
+}
+
+/**
+ * Ссылка на оплату из Kaspi Business. Открытого API платежей у Kaspi нет, поэтому CRM не узнаёт об оплате сама:
+ * после поступления денег сотрудник отмечает оплату вручную (способ «Kaspi перевод»).
+ */
+function KaspiPayment({ booking, url, due }: { booking: Booking; url: string; due: number }) {
+  const { t, i18n } = useTranslation();
+  const lang = (i18n.language === "kk" ? "kk" : "ru") as AppLanguage;
+  const { org } = useOrg();
+  const text = kaspiPaymentText(t, { name: org.name, number: booking.number, amount: due, url, lang });
+  const phone = booking.guest?.phone;
+  const copy = async () => (await copyText(text) ? toast.success(t("common.copied")) : toast.error(t("marketing.copyFailed")));
+  return (
+    <div className="mt-3 grid gap-2 rounded-md border bg-muted/30 p-3 text-sm">
+      <p className="font-medium">{t("kaspi.bookingTitle")}</p>
+      <p className="whitespace-pre-line break-words text-xs text-muted-foreground">{text}</p>
+      <div className="flex flex-wrap gap-2">
+        <Button size="sm" variant="outline" onClick={copy}><Copy /> {t("kaspi.copyMessage")}</Button>
+        {phone && (
+          <Button size="sm" variant="outline" asChild>
+            <a href={whatsappLink(phone, text)} target="_blank" rel="noopener noreferrer">{t("kaspi.sendWaMe")}</a>
+          </Button>
+        )}
+      </div>
+      <p className="text-xs text-muted-foreground">{t("kaspi.manualNote")}</p>
+    </div>
   );
 }

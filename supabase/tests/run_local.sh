@@ -13,7 +13,7 @@ for f in supabase/migrations/*.sql; do
   echo "migrate: $f"
   psql -v ON_ERROR_STOP=1 -q -d "$DB" -f "$f"
 done
-for f in supabase/tests/[0-9][1-9]_*_test.sql; do
+for f in supabase/tests/[0-9][0-9]_*_test.sql; do
   echo "test: $f"
   psql -v ON_ERROR_STOP=1 -q -d "$DB" -f "$f"
 done

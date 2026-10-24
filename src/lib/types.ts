@@ -28,6 +28,8 @@ export interface Organization {
   currency: "KZT";
   default_language: AppLanguage;
   is_published: boolean;
+  /** Ссылка на оплату из Kaspi Business (миграция 0012); до её применения поля нет */
+  kaspi_pay_url?: string | null;
 }
 
 export interface OrganizationSubscription {

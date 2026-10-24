@@ -22,7 +22,7 @@ export const AUDIT_GROUPS = {
   marketing: ["review.", "promo_code."],
   catalog: ["room_type.", "room_rate.", "room.create", "room.update", "room.delete"],
   staff: ["member.", "role.", "organization."],
-  settings: ["settings.", "billing.", "admin."],
+  settings: ["settings.", "billing.", "admin.", "integration."],
 } as const;
 export type AuditGroup = keyof typeof AUDIT_GROUPS;
 

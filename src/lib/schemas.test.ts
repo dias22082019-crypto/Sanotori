@@ -19,7 +19,7 @@ describe("registerSchema", () => {
 describe("organizationSettingsSchema", () => {
   const base = {
     name: "Санаторий", description: "", address: "", city: "", phone: "", email: "", whatsapp_phone: "",
-    legal_name: "", bin: "", timezone: "Asia/Almaty", default_language: "ru" as const, is_published: false,
+    legal_name: "", bin: "", timezone: "Asia/Almaty", default_language: "ru" as const, is_published: false, kaspi_pay_url: "",
   };
   it("normalizes Kazakhstan phones and empties to null", () => {
     const r = organizationSettingsSchema.parse({ ...base, phone: "8 (701) 123-45-67" });

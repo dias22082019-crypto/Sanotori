@@ -127,6 +127,11 @@ export function whatsappLink(e164: string, text?: string): string {
   return text ? `${base}?text=${encodeURIComponent(text)}` : base;
 }
 
+/** Ссылка на оплату Kaspi: только https на домене kaspi.kz (совпадает с ограничением в БД) */
+export function isKaspiUrl(value: string): boolean {
+  return value.length <= 500 && /^https:\/\/([a-z0-9-]+\.)*kaspi\.kz(\/\S*)?$/i.test(value);
+}
+
 /** slug для адреса публичной страницы, совпадает с ограничением в БД */
 export const SLUG_PATTERN = /^[a-z0-9][a-z0-9-]{1,48}[a-z0-9]$/;
 

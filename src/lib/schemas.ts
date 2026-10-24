@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { normalizeKzPhone, SLUG_PATTERN } from "./format";
+import { isKaspiUrl, normalizeKzPhone, SLUG_PATTERN } from "./format";
 
 /** Сообщения — ключи i18n; перевод выполняется при выводе ошибки */
 export const emailSchema = z.string().trim().min(1, "validation.required").email("validation.email").max(254, "validation.tooLong");
@@ -56,6 +56,9 @@ export const organizationSettingsSchema = z.object({
   timezone: z.string().min(1, "validation.required"),
   default_language: z.enum(["ru", "kk"]),
   is_published: z.boolean(),
+  kaspi_pay_url: z.string().trim().max(500, "validation.tooLong")
+    .refine((v) => v === "" || isKaspiUrl(v), "kaspi.urlInvalid")
+    .transform((v) => (v === "" ? null : v)),
 });
 
 export type OrganizationSettingsInput = z.input<typeof organizationSettingsSchema>;
