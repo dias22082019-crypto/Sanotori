@@ -44,7 +44,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { key: "analytics", path: "analytics", icon: BarChart3, permission: "reports.read" },
       { key: "inventory", path: "inventory", icon: Package, permission: "inventory.read" },
       { key: "messages", path: "messages", icon: MessageCircle, permission: "messages.read", stage: 5 },
-      { key: "marketing", path: "marketing", icon: Star, permission: "marketing.read", stage: 6 },
+      { key: "marketing", path: "marketing", icon: Star, permission: "marketing.read" },
     ],
   },
   {

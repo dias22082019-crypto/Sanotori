@@ -32,8 +32,10 @@ import { TasksPage } from "@/pages/app/TasksPage";
 import { AuditPage } from "@/pages/app/AuditPage";
 import { AnalyticsPage } from "@/pages/app/AnalyticsPage";
 import { InventoryPage } from "@/pages/app/InventoryPage";
+import { MarketingPage } from "@/pages/app/MarketingPage";
 import { BillingPage } from "@/pages/app/BillingPage";
 import { PublicSanatoriumPage } from "@/pages/public/PublicSanatoriumPage";
+import { ReviewPage } from "@/pages/public/ReviewPage";
 import { AdminPage } from "@/pages/admin/AdminPage";
 import { NotFoundState } from "@/components/states/ErrorState";
 
@@ -63,6 +65,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/s/:slug" element={<PublicSanatoriumPage />} />
+            <Route path="/review/:token" element={<ReviewPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/verify-email" element={<VerifyEmailPage />} />
@@ -87,6 +90,7 @@ export default function App() {
               <Route path="procedures" element={<RequirePermission permission="procedures.read"><ProceduresPage /></RequirePermission>} />
               <Route path="tasks" element={<RequirePermission permission="tasks.read"><TasksPage /></RequirePermission>} />
               <Route path="inventory" element={<RequirePermission permission="inventory.read"><InventoryPage /></RequirePermission>} />
+              <Route path="marketing" element={<RequirePermission permission="marketing.read"><MarketingPage /></RequirePermission>} />
               <Route path="analytics" element={<RequirePermission permission="reports.read"><AnalyticsPage /></RequirePermission>} />
               <Route path="audit" element={<RequirePermission permission="audit.read"><AuditPage /></RequirePermission>} />
               <Route path="billing" element={<RequirePermission permission="billing.manage"><BillingPage /></RequirePermission>} />

@@ -12,6 +12,7 @@ import { Input, NativeSelect } from "@/components/ui/input";
 import { Dialog } from "@/components/ui/dialog";
 import { BookingPayments } from "@/features/finance/BookingPayments";
 import { BookingProcedures } from "@/features/procedures/BookingProcedures";
+import { BookingMarketing } from "@/features/marketing/BookingMarketing";
 import { invalidateBookings } from "./BookingDialog";
 
 /** Карточка брони с действиями по статусу. Права и правила переходов проверяет set_booking_status() на сервере. */
@@ -98,6 +99,7 @@ export function BookingDetailsDialog({ booking, rooms, roomTypes, onEdit, onClos
       {b.status !== "new_request" && hasFeature("procedures")
         && (can("procedures.read") || can("finance.read") || can("payments.accept")) && <BookingProcedures booking={b} />}
       {b.status !== "new_request" && <BookingPayments booking={b} />}
+      <BookingMarketing booking={b} />
 
       {cancelMode ? (
         <div className="mt-5 grid gap-2 rounded-md border p-3">

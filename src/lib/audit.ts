@@ -19,6 +19,7 @@ export const AUDIT_GROUPS = {
   procedures: ["procedure.", "procedure_type.", "treatment_room."],
   tasks: ["task."],
   inventory: ["inventory."],
+  marketing: ["review.", "promo_code."],
   catalog: ["room_type.", "room_rate.", "room.create", "room.update", "room.delete"],
   staff: ["member.", "role.", "organization."],
   settings: ["settings.", "billing.", "admin."],
