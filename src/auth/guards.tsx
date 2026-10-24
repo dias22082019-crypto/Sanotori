@@ -18,7 +18,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
 
 /** Скрывает раздел без нужного права. Это удобство интерфейса; данные защищает RLS на сервере. */
 export function RequirePermission({ permission, children }: { permission: Permission; children: ReactNode }) {
-  const { can } = useOrg();
-  if (!can(permission)) return <ForbiddenState />;
+  const { can, org } = useOrg();
+  if (!can(permission)) return <ForbiddenState homeTo={`/app/${org.slug}`} />;
   return <>{children}</>;
 }

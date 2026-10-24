@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BarChart3, Download } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { supabase } from "@/lib/supabase";
-import { formatDate, formatKzt, todayInTimeZone, type AppLanguage } from "@/lib/format";
+import { formatDate, formatKzt, formatMonthYear, formatNumber, todayInTimeZone, type AppLanguage } from "@/lib/format";
 import { downloadCsv } from "@/lib/finance";
 import {
   ANALYTICS_PRESETS, kpis, occupancySeries, percent, presetRange,
@@ -26,13 +26,11 @@ const SERIES_1 = "#0f9a8a";
 const SERIES_2 = "#eb6834";
 const AXIS = { fontSize: 12, fill: "hsl(var(--muted-foreground))" };
 
-const monthLabel = (iso: string, lang: AppLanguage) =>
-  new Intl.DateTimeFormat(lang === "kk" ? "kk-KZ" : "ru-RU", { month: "short", year: "2-digit", timeZone: "UTC" })
-    .format(new Date(`${iso}T00:00:00Z`));
-const num = (v: number, lang: AppLanguage) => v.toLocaleString(lang === "kk" ? "kk-KZ" : "ru-RU", { maximumFractionDigits: 1 });
+const monthLabel = (iso: string, lang: AppLanguage) => formatMonthYear(iso, lang, true);
+const num = (v: number, lang: AppLanguage) => formatNumber(v, lang);
 const dayLabel = (iso: string) => `${iso.slice(8, 10)}.${iso.slice(5, 7)}`;
-const compactKzt = (v: number, lang: AppLanguage) =>
-  new Intl.NumberFormat(lang === "kk" ? "kk-KZ" : "ru-RU", { notation: "compact", maximumFractionDigits: 1 }).format(v);
+/** «28 млн» — сокращение одинаковое для ru и kk */
+const compactKzt = (v: number) => new Intl.NumberFormat("ru-RU", { notation: "compact", maximumFractionDigits: 1 }).format(v);
 
 /** Аналитика санатория (reports.read, модуль analytics): загрузка, деньги, источники, категории, процедуры */
 export function AnalyticsPage() {
@@ -140,7 +138,7 @@ export function AnalyticsPage() {
         <ErrorState error={report.error} onRetry={() => report.refetch()} />
       ) : (
         <>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {[
               { key: "occupancy", value: k && `${num(k.occupancy, lang)}%`, note: r && t("analytics.kpi.occupancyNote", { nights: r.room_nights, rooms: r.rooms }) },
               { key: "adr", value: k && formatKzt(k.adr, lang), note: t("analytics.kpi.adrNote") },
@@ -199,7 +197,7 @@ export function AnalyticsPage() {
                       <BarChart data={moneyData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }} barGap={2}>
                         <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
                         <XAxis dataKey="month" tick={AXIS} tickLine={false} axisLine={false} tickFormatter={(v: string) => monthLabel(v, lang)} />
-                        <YAxis tick={AXIS} tickLine={false} axisLine={false} tickFormatter={(v: number) => compactKzt(v, lang)} width={56} />
+                        <YAxis tick={AXIS} tickLine={false} axisLine={false} tickFormatter={(v: number) => compactKzt(v)} width={56} />
                         <Tooltip cursor={{ fill: "hsl(var(--muted))" }} labelFormatter={(v) => monthLabel(String(v), lang)}
                           formatter={(v, name) => [formatKzt(Number(v), lang), t(`analytics.series.${name}`)]} />
                         <Legend formatter={(name) => <span className="text-sm text-foreground">{t(`analytics.series.${name}`)}</span>} iconType="square" />

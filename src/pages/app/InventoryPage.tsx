@@ -168,9 +168,9 @@ function Stock({ items, canWrite, onEdit }: {
                       <div className="flex w-full flex-wrap gap-1.5 sm:w-auto">
                         <Button size="sm" variant="outline" onClick={() => setMove({ item: i, kind: "receipt" })}><ArrowDownToLine /> {t("inventory.kinds.receipt")}</Button>
                         <Button size="sm" variant="outline" disabled={level === "out"} onClick={() => setMove({ item: i, kind: "issue" })}><ArrowUpFromLine /> {t("inventory.kinds.issue")}</Button>
-                        <Button size="sm" variant="ghost" disabled={level === "out"} onClick={() => setMove({ item: i, kind: "writeoff" })} aria-label={t("inventory.kinds.writeoff")} title={t("inventory.kinds.writeoff")}><Trash2 /></Button>
-                        <Button size="sm" variant="ghost" onClick={() => setMove({ item: i, kind: "adjustment" })} aria-label={t("inventory.kinds.adjustment")} title={t("inventory.kinds.adjustment")}><ClipboardList /></Button>
-                        <Button size="sm" variant="ghost" onClick={() => onEdit(i)} aria-label={t("common.edit")} title={t("common.edit")}><Pencil /></Button>
+                        <Button size="sm" variant="ghost" className="px-2" disabled={level === "out"} onClick={() => setMove({ item: i, kind: "writeoff" })} aria-label={t("inventory.kinds.writeoff")} title={t("inventory.kinds.writeoff")}><Trash2 /></Button>
+                        <Button size="sm" variant="ghost" className="px-2" onClick={() => setMove({ item: i, kind: "adjustment" })} aria-label={t("inventory.kinds.adjustment")} title={t("inventory.kinds.adjustment")}><ClipboardList /></Button>
+                        <Button size="sm" variant="ghost" className="px-2" onClick={() => onEdit(i)} aria-label={t("common.edit")} title={t("common.edit")}><Pencil /></Button>
                       </div>
                     )}
                     {canWrite && !i.is_active && (

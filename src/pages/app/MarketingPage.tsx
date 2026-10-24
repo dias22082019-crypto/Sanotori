@@ -6,7 +6,7 @@ import { Download, Eye, EyeOff, MessageSquareReply, Pencil, Plus, Star, TicketPe
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { describeError } from "@/lib/errors";
-import { formatDate, formatDateTime, formatKzt, type AppLanguage } from "@/lib/format";
+import { formatDate, formatDateTime, formatKzt, formatNumber, type AppLanguage } from "@/lib/format";
 import { downloadCsv, parseAmount } from "@/lib/finance";
 import {
   PROMO_PATTERN, describeMarketingError, normalizePromoCode, promoValueText, starsText,
@@ -121,7 +121,7 @@ function Reviews({ canWrite }: { canWrite: boolean }) {
           <Card><CardContent className="pt-5">
             <p className="text-sm text-muted-foreground">{t("marketing.average")}</p>
             <p className="mt-1.5 flex items-center gap-2 text-2xl font-semibold tabular-nums">
-              {Number(s.average).toLocaleString(lang === "kk" ? "kk-KZ" : "ru-RU")} <Stars rating={Math.round(Number(s.average))} />
+              {formatNumber(s.average ?? 0, lang)} <Stars rating={Math.round(Number(s.average))} />
             </p>
             <p className="mt-0.5 text-xs text-muted-foreground">{t("marketing.reviewsCount", { count: s.count })}</p>
           </CardContent></Card>

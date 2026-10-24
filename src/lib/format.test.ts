@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatKzt, normalizeKzPhone, formatKzPhone, slugify, SLUG_PATTERN, todayInTimeZone, whatsappLink } from "./format";
+import { formatDate, formatKzt, formatMonthYear, formatNumber, formatWeekdayShort, normalizeKzPhone, formatKzPhone, slugify, SLUG_PATTERN, todayInTimeZone, whatsappLink } from "./format";
 
 describe("formatKzt", () => {
   it("formats tenge with the ₸ sign and grouping", () => {
@@ -46,5 +46,19 @@ describe("todayInTimeZone", () => {
 describe("whatsappLink", () => {
   it("builds a wa.me link with encoded text", () => {
     expect(whatsappLink("+77011234567", "Здравствуйте")).toBe("https://wa.me/77011234567?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5");
+  });
+});
+
+describe("kk formatting does not depend on browser locale data", () => {
+  it("formats numbers, money and dates the same way as ru", () => {
+    expect(formatKzt(27500, "kk").replace(/\s/g, " ")).toBe("27 500 ₸");
+    expect(formatNumber(84.66, "kk")).toBe("84,7");
+    expect(formatDate("2026-11-07", "kk")).toBe("07.11.2026");
+  });
+  it("uses Kazakh month and weekday names", () => {
+    expect(formatMonthYear("2026-10-24", "kk")).toBe("Қазан 2026");
+    expect(formatMonthYear("2026-10-01", "kk", true)).toBe("қаз. 26");
+    expect(formatWeekdayShort("2026-10-26", "kk")).toBe("дс");
+    expect(formatMonthYear("2026-10-24", "ru")).toBe("октябрь 2026 г.");
   });
 });

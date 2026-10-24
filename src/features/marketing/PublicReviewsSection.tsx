@@ -2,12 +2,13 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import type { PublicReviews } from "@/lib/marketing";
+import { formatMonthYear, formatNumber, type AppLanguage } from "@/lib/format";
 import { Stars } from "@/components/Stars";
 
 /** Опубликованные отзывы на публичной странице санатория. Если отзывов нет или модуля нет — блок не показывается. */
 export function PublicReviewsSection({ slug }: { slug: string }) {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language === "kk" ? "kk-KZ" : "ru-RU";
+  const lang = (i18n.language === "kk" ? "kk" : "ru") as AppLanguage;
   const query = useQuery({
     queryKey: ["public-reviews", slug],
     queryFn: async () => {
@@ -19,7 +20,7 @@ export function PublicReviewsSection({ slug }: { slug: string }) {
   });
   const r = query.data;
   if (!r || !r.count) return null;
-  const month = (m: string) => new Date(`${m}-01T00:00:00`).toLocaleDateString(locale, { month: "long", year: "numeric" });
+  const month = (m: string) => formatMonthYear(`${m}-01`, lang);
 
   return (
     <section className="mt-10" aria-labelledby="public-reviews">
@@ -27,7 +28,7 @@ export function PublicReviewsSection({ slug }: { slug: string }) {
         <h2 id="public-reviews" className="text-lg font-semibold">{t("public.reviews")}</h2>
         <span className="flex items-center gap-2 text-sm text-muted-foreground">
           <Stars rating={Math.round(Number(r.average))} />
-          <span className="tabular-nums">{Number(r.average).toLocaleString(locale)}</span>
+          <span className="tabular-nums">{formatNumber(r.average ?? 0, lang)}</span>
           · {t("marketing.reviewsCount", { count: r.count })}
         </span>
       </div>

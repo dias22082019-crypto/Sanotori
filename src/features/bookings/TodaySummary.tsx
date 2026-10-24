@@ -31,7 +31,7 @@ export function TodaySummary() {
     },
   });
 
-  if (q.isLoading) return <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-24" />)}</div>;
+  if (q.isLoading) return <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-24" />)}</div>;
   if (q.error || !q.data) return <ErrorState error={q.error} onRetry={() => q.refetch()} />;
   const s = q.data;
   const occupancy = s.rooms_total > 0 ? Math.round((s.rooms_occupied / s.rooms_total) * 100) : null;
@@ -44,14 +44,14 @@ export function TodaySummary() {
   ];
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {tiles.map((tile) => (
         <Link key={tile.key} to={tile.to} className="rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           <Card className="h-full transition-colors hover:bg-muted/40">
             <CardContent className="pt-5">
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="flex items-start justify-between gap-2 text-sm text-muted-foreground">
                 {t(`dashboard.today.${tile.key}`)}
-                <tile.icon className="h-4 w-4" />
+                <tile.icon className="mt-0.5 h-4 w-4 shrink-0" />
               </div>
               <p className="mt-2 text-2xl font-semibold tabular-nums">{tile.value}</p>
               {tile.note && <p className="mt-0.5 text-xs text-muted-foreground">{tile.note}</p>}

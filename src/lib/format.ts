@@ -2,7 +2,44 @@ export const DEFAULT_TIMEZONE = "Asia/Almaty";
 
 export type AppLanguage = "ru" | "kk";
 
-const localeFor = (lang: AppLanguage) => (lang === "kk" ? "kk-KZ" : "ru-RU");
+/**
+ * Числа, суммы и даты цифрами пишутся одинаково для ru и kk («27 500 ₸», «07.11.2026»), поэтому форматируются
+ * по ru-RU. Данных локали kk-KZ нет в части браузеров (там получался английский формат «27,500», «11/07/2026»).
+ */
+const localeFor = (_lang: AppLanguage) => "ru-RU";
+
+/** Названия месяцев и дней недели на казахском — свои, чтобы не зависеть от данных ICU в браузере */
+const KK_MONTHS = ["Қаңтар", "Ақпан", "Наурыз", "Сәуір", "Мамыр", "Маусым", "Шілде", "Тамыз", "Қыркүйек", "Қазан", "Қараша", "Желтоқсан"];
+const KK_MONTHS_SHORT = ["қаң.", "ақп.", "нау.", "сәу.", "мам.", "мау.", "шіл.", "там.", "қыр.", "қаз.", "қар.", "жел."];
+const KK_WEEKDAYS_SHORT = ["жс", "дс", "сс", "ср", "бс", "жм", "сб"];
+
+const utcDate = (isoDate: string) => {
+  const [y, m, d] = isoDate.slice(0, 10).split("-").map(Number);
+  return new Date(Date.UTC(y, (m || 1) - 1, d || 1));
+};
+
+/** Число по-русски/по-казахски одинаково: 1234.5 → «1 234,5» */
+export function formatNumber(value: number | string, lang: AppLanguage = "ru", maximumFractionDigits = 1): string {
+  return Number(value).toLocaleString(localeFor(lang), { maximumFractionDigits });
+}
+
+/** Месяц и год: «октябрь 2026 г.» / «Қазан 2026»; short — «окт. 26 г.» / «қаз. 26» */
+export function formatMonthYear(isoDate: string, lang: AppLanguage = "ru", short = false): string {
+  const date = utcDate(isoDate);
+  if (lang === "kk") {
+    const m = date.getUTCMonth();
+    return short ? `${KK_MONTHS_SHORT[m]} ${String(date.getUTCFullYear()).slice(2)}` : `${KK_MONTHS[m]} ${date.getUTCFullYear()}`;
+  }
+  return new Intl.DateTimeFormat("ru-RU", short ? { month: "short", year: "2-digit", timeZone: "UTC" } : { month: "long", year: "numeric", timeZone: "UTC" })
+    .format(date);
+}
+
+/** Короткий день недели: «пн» / «дс» */
+export function formatWeekdayShort(isoDate: string, lang: AppLanguage = "ru"): string {
+  const date = utcDate(isoDate);
+  if (lang === "kk") return KK_WEEKDAYS_SHORT[date.getUTCDay()];
+  return new Intl.DateTimeFormat("ru-RU", { weekday: "short", timeZone: "UTC" }).format(date);
+}
 
 /** Сумма в тенге: 125000 → «125 000 ₸». Принимает строку из numeric, чтобы не терять точность. */
 export function formatKzt(amount: number | string, lang: AppLanguage = "ru"): string {

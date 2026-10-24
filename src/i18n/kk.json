@@ -225,7 +225,8 @@
     "suspendConfirmTitle": "Қолжетімділікті тоқтату керек пе?",
     "suspendConfirmText": "Қолжетімділік қайта ашылмайынша, қызметкер бұл шипажайға кіре алмайды.",
     "roleChanged": "Рөл өзгертілді",
-    "empty": "Әзірге командада тек сіз барсыз"
+    "empty": "Әзірге командада тек сіз барсыз",
+    "chooseRole": "Рөлді таңдаңыз"
   },
   "account": {
     "title": "Менің профилім",
@@ -963,6 +964,11 @@
       "doctor": "Дәрігер",
       "nurse": "Мейірбике",
       "housekeeping": "Үй қызметшісі"
+    },
+    "plans": {
+      "start": "Start",
+      "business": "Business",
+      "enterprise": "Enterprise"
     }
   },
   "billing": {
@@ -1030,7 +1036,8 @@
       "cancelled": "Тоқтатылды",
       "refunded": "Қайтарылды",
       "partially_refunded": "Ішінара қайтарылды"
-    }
+    },
+    "soon": "жақында"
   },
   "analytics": {
     "title": "Талдау",

@@ -1,5 +1,5 @@
 import type { TFunction } from "i18next";
-import type { AppLanguage } from "./format";
+import { formatNumber, type AppLanguage } from "./format";
 
 export const INVENTORY_CATEGORIES = ["linen", "amenities", "cleaning", "food", "medical", "office", "other"] as const;
 export type InventoryCategory = (typeof INVENTORY_CATEGORIES)[number];
@@ -58,7 +58,7 @@ export function balanceAfter(kind: MoveKind, current: number, quantity: number):
 
 /** Количество без лишних нулей: 12.000 → «12», 2.500 → «2,5» */
 export function formatQty(value: string | number, lang: AppLanguage = "ru"): string {
-  return Number(value).toLocaleString(lang === "kk" ? "kk-KZ" : "ru-RU", { maximumFractionDigits: 3 });
+  return formatNumber(value, lang, 3);
 }
 
 export function describeInventoryError(error: unknown, t: TFunction): string | null {

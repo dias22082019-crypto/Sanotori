@@ -225,7 +225,8 @@
     "suspendConfirmTitle": "Приостановить доступ?",
     "suspendConfirmText": "Сотрудник не сможет входить в этот санаторий, пока доступ не будет возобновлён.",
     "roleChanged": "Роль изменена",
-    "empty": "Пока в команде только вы"
+    "empty": "Пока в команде только вы",
+    "chooseRole": "Выберите роль"
   },
   "account": {
     "title": "Мой профиль",
@@ -977,6 +978,11 @@
       "doctor": "Врач",
       "nurse": "Медсестра",
       "housekeeping": "Горничная"
+    },
+    "plans": {
+      "start": "Start",
+      "business": "Business",
+      "enterprise": "Enterprise"
     }
   },
   "billing": {
@@ -1048,7 +1054,8 @@
       "cancelled": "Отменён",
       "refunded": "Возвращён",
       "partially_refunded": "Частично возвращён"
-    }
+    },
+    "soon": "скоро"
   },
   "analytics": {
     "title": "Аналитика",

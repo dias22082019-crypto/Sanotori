@@ -132,7 +132,7 @@ export function FinancePage() {
       />
 
       {report.error ? <ErrorState error={report.error} onRetry={() => report.refetch()} /> : (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
           {[
             { key: "income", value: r?.payments },
             { key: "refunds", value: r?.refunds },
@@ -301,8 +301,8 @@ function ExpensesCard(props: {
   const activeCats = props.categories.filter((c) => c.is_active);
   return (
     <Card>
-      <CardHeader className="flex-row items-start justify-between gap-2 space-y-0">
-        <div>
+      <CardHeader className="flex-row flex-wrap items-start justify-between gap-2 space-y-0">
+        <div className="min-w-0 basis-56 flex-1">
           <CardTitle>{t("finance.expensesTitle")}</CardTitle>
           {props.byCategory.length > 0 && (
             <CardDescription>{props.byCategory.map((c) => `${c.name}: ${formatKzt(c.amount, props.lang)}`).join(" · ")}</CardDescription>

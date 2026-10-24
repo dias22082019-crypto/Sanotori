@@ -27,9 +27,12 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
   );
 }
 
-export function ForbiddenState() {
+export function ForbiddenState({ homeTo }: { homeTo?: string }) {
   const { t } = useTranslation();
-  return <StateBox icon={<Lock className="h-5 w-5" />} title={t("common.forbiddenTitle")} text={t("common.forbiddenText")} />;
+  return (
+    <StateBox icon={<Lock className="h-5 w-5" />} title={t("common.forbiddenTitle")} text={t("common.forbiddenText")}
+      action={homeTo ? <Button asChild variant="outline"><Link to={homeTo}>{t("common.toHome")}</Link></Button> : undefined} />
+  );
 }
 
 export function NotFoundState() {

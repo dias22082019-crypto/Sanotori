@@ -49,7 +49,7 @@ function fieldLabel(key: string, t: TFunction): string {
 const STATUS_NAMESPACES = ["bookings.status", "procedures.status", "tasks.status", "subscription.status", "rooms.status", "audit.roles"];
 
 /** Поле → пространство переводов его значений */
-const VALUE_NAMESPACES: Record<string, string> = { period: "billing.period", source: "bookings.source", method: "finance.method", category: "inventory.categories" };
+const VALUE_NAMESPACES: Record<string, string> = { period: "billing.period", source: "bookings.source", method: "finance.method", category: "inventory.categories", plan: "audit.plans" };
 
 function translated(key: string, t: TFunction): string | null {
   const label = t(key);
