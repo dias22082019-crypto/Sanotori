@@ -36,7 +36,7 @@ export interface OrganizationSubscription {
   trial_ends_at: string | null;
   current_period_end: string | null;
   grace_days: number;
-  plan: { code: string; name_ru: string; name_kk: string } | null;
+  plan: { code: string; name_ru: string; name_kk: string; features?: { feature_code: string }[] } | null;
 }
 
 export interface Role {

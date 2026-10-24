@@ -30,12 +30,12 @@ export const NAV_SECTIONS: NavSection[] = [
       { key: "rooms", path: "rooms", icon: BedDouble, permission: "rooms.read" },
       { key: "guests", path: "guests", icon: UserRound, permission: "guests.read" },
       { key: "leads", path: "leads", icon: Inbox, permission: "leads.read", stage: 5 },
-      { key: "tasks", path: "tasks", icon: ClipboardCheck, permission: "tasks.read", stage: 4 },
+      { key: "tasks", path: "tasks", icon: ClipboardCheck, permission: "tasks.read" },
     ],
   },
   {
     key: "sectionMedical",
-    items: [{ key: "procedures", path: "procedures", icon: HeartPulse, permission: "procedures.read", stage: 4 }],
+    items: [{ key: "procedures", path: "procedures", icon: HeartPulse, permission: "procedures.read" }],
   },
   {
     key: "sectionBusiness",

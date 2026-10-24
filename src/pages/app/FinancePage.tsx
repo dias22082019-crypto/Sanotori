@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Download, Plus, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
-import { formatDate, formatDateTime, formatKzt, todayInTimeZone, type AppLanguage } from "@/lib/format";
+import { formatDate, formatDateTime, formatKzt, todayInTimeZone, zonedDateTime, type AppLanguage } from "@/lib/format";
 import { addDays } from "@/lib/bookings";
 import {
   PAYMENT_METHODS, describeFinanceError, downloadCsv, monthBounds, parseAmount,
@@ -23,11 +23,7 @@ import { ErrorState } from "@/components/states/ErrorState";
 
 /** Начало дня YYYY-MM-DD в часовом поясе санатория как ISO-время со смещением */
 export function zonedDayStart(isoDate: string, timeZone: string): string {
-  const probe = new Date(`${isoDate}T12:00:00Z`);
-  const name = new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "longOffset" })
-    .formatToParts(probe).find((p) => p.type === "timeZoneName")?.value ?? "GMT";
-  const m = /GMT([+-]\d{2}):?(\d{2})?/.exec(name);
-  return `${isoDate}T00:00:00${m ? `${m[1]}:${m[2] ?? "00"}` : "+00:00"}`;
+  return zonedDateTime(isoDate, "00:00", timeZone);
 }
 
 interface PaymentRow {

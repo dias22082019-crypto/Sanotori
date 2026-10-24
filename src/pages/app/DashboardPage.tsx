@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { BedDouble, CheckCircle2, Circle, Globe, Settings, Users } from "lucide-react";
 import { TodaySummary } from "@/features/bookings/TodaySummary";
+import { WorkToday } from "@/features/procedures/WorkToday";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/auth/AuthProvider";
 import { useOrg } from "@/auth/OrgProvider";
@@ -53,6 +54,7 @@ export function DashboardPage() {
     <>
       <PageHeader title={t("dashboard.title")} description={t("dashboard.welcome", { name })} />
       {can("bookings.read") && <TodaySummary />}
+      <WorkToday />
       {steps.length > 0 && !setupDone && (
         <Card className="mt-4">
           <CardHeader>

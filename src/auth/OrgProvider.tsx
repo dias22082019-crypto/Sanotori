@@ -16,6 +16,8 @@ interface OrgState {
   /** Подписка позволяет изменять данные (совпадает с app.subscription_writable в БД) */
   writable: boolean;
   can: (permission: Permission) => boolean;
+  /** Модуль входит в тариф (plan_features). Запись дополнительно требует writable — как app.feature_enabled в БД. */
+  hasFeature: (feature: string) => boolean;
 }
 
 const OrgContext = createContext<OrgState | null>(null);
@@ -58,7 +60,7 @@ export function OrgProvider({ children }: { children: ReactNode }) {
         supabase.rpc("my_permissions", { p_tenant: tenantId }),
         supabase
           .from("organization_subscriptions")
-          .select("id, status, trial_ends_at, current_period_end, grace_days, plan:subscription_plans(code, name_ru, name_kk)")
+          .select("id, status, trial_ends_at, current_period_end, grace_days, plan:subscription_plans(code, name_ru, name_kk, features:plan_features(feature_code))")
           .eq("tenant_id", tenantId)
           .neq("status", "cancelled")
           .maybeSingle(),
@@ -92,6 +94,7 @@ export function OrgProvider({ children }: { children: ReactNode }) {
     subscription,
     writable: isSubscriptionWritable(subscription),
     can: (p) => permissions.has(p),
+    hasFeature: (f) => Boolean(subscription?.plan?.features?.some((x) => x.feature_code === f)),
   };
   return <OrgContext.Provider value={value}>{children}</OrgContext.Provider>;
 }

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input, NativeSelect } from "@/components/ui/input";
 import { Dialog } from "@/components/ui/dialog";
 import { BookingPayments } from "@/features/finance/BookingPayments";
+import { BookingProcedures } from "@/features/procedures/BookingProcedures";
 import { invalidateBookings } from "./BookingDialog";
 
 /** Карточка брони с действиями по статусу. Права и правила переходов проверяет set_booking_status() на сервере. */
@@ -23,7 +24,7 @@ export function BookingDetailsDialog({ booking, rooms, roomTypes, onEdit, onClos
 }) {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language === "kk" ? "kk" : "ru") as AppLanguage;
-  const { org, can, writable } = useOrg();
+  const { org, can, writable, hasFeature } = useOrg();
   const qc = useQueryClient();
   const today = todayInTimeZone(org.timezone);
   const [busy, setBusy] = useState(false);
@@ -94,6 +95,8 @@ export function BookingDetailsDialog({ booking, rooms, roomTypes, onEdit, onClos
         {b.internal_notes && (<><dt className="text-muted-foreground">{t("bookings.fields.internalNotes")}</dt><dd className="whitespace-pre-line">{b.internal_notes}</dd></>)}
         {b.cancel_reason && (<><dt className="text-muted-foreground">{t("bookings.fields.cancelReason")}</dt><dd>{b.cancel_reason}</dd></>)}
       </dl>
+      {b.status !== "new_request" && hasFeature("procedures")
+        && (can("procedures.read") || can("finance.read") || can("payments.accept")) && <BookingProcedures booking={b} />}
       {b.status !== "new_request" && <BookingPayments booking={b} />}
 
       {cancelMode ? (
