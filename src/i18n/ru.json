@@ -137,7 +137,8 @@
     "account": "Мой профиль",
     "switchOrg": "Сменить санаторий",
     "openMenu": "Открыть меню",
-    "publicPage": "Публичная страница"
+    "publicPage": "Публичная страница",
+    "analytics": "Аналитика"
   },
   "dashboard": {
     "title": "Обзор",
@@ -1014,6 +1015,86 @@
       "cancelled": "Отменён",
       "refunded": "Возвращён",
       "partially_refunded": "Частично возвращён"
+    }
+  },
+  "analytics": {
+    "title": "Аналитика",
+    "subtitle": "Загрузка номеров, деньги, источники броней и процедуры за период",
+    "period": "Период",
+    "presets": {
+      "thisMonth": "Этот месяц",
+      "lastMonth": "Прошлый месяц",
+      "last3Months": "Последние 3 месяца",
+      "thisYear": "С начала года",
+      "custom": "Свои даты"
+    },
+    "tooLong": "Выберите период не длиннее года.",
+    "notInPlan": "Аналитика не входит в ваш тариф",
+    "notInPlanText": "Она доступна на тарифах Business и Enterprise.",
+    "kpi": {
+      "occupancy": "Загрузка",
+      "occupancyNote": "{{nights}} номеро-ночей, номеров: {{rooms}}",
+      "adr": "Средняя цена ночи",
+      "adrNote": "начислено за проживание / проданные ночи",
+      "revpar": "Доход на номер в сутки",
+      "revparNote": "начислено за проживание / (номера × дни)",
+      "received": "Поступило денег",
+      "accrued": "начислено за проживание: {{amount}}",
+      "bookings": "Новых броней",
+      "cancelNote": "отмены и незаезды: {{value}}%",
+      "avgNights": "Средний срок, ночей",
+      "leadNote": "бронируют за {{value}} дн. до заезда",
+      "guests": "Гостей проживало",
+      "returningNote_one": "из них {{count}} повторно",
+      "returningNote_few": "из них {{count}} повторно",
+      "returningNote_many": "из них {{count}} повторно",
+      "returningNote_other": "из них {{count}} повторно",
+      "expenses": "Расходы",
+      "expensesNote": "из раздела «Финансы»",
+      "roomNights": "Номеро-ночи",
+      "accommodation": "Начислено за проживание",
+      "cancelRate": "Отмены и незаезды",
+      "leadDays": "Дней от брони до заезда",
+      "returning": "Повторные гости"
+    },
+    "occupancyTitle": "Загрузка номеров",
+    "occupancyByDay": "Доля занятых номеров по дням",
+    "occupancyByMonth": "Доля занятых номеров по месяцам",
+    "noRooms": "Номера ещё не добавлены.",
+    "moneyTitle": "Поступления и расходы",
+    "moneyText": "По месяцам, за вычетом возвратов",
+    "series": {
+      "received": "Поступления",
+      "expenses": "Расходы"
+    },
+    "sourcesTitle": "Откуда приходят брони",
+    "sourcesText": "Брони, созданные за период",
+    "noBookings": "За период новых броней нет.",
+    "sourceLine_one": "{{count}} бронь · {{amount}}",
+    "sourceLine_few": "{{count}} брони · {{amount}}",
+    "sourceLine_many": "{{count}} броней · {{amount}}",
+    "sourceLine_other": "{{count}} брони · {{amount}}",
+    "sourceCancelled_one": "отменена {{count}}",
+    "sourceCancelled_few": "отменено {{count}}",
+    "sourceCancelled_many": "отменено {{count}}",
+    "sourceCancelled_other": "отменено {{count}}",
+    "roomTypesTitle": "Категории номеров",
+    "roomTypesText": "Загрузка и начисления по категориям",
+    "proceduresTitle": "Процедуры",
+    "proceduresText": "Проведённые процедуры и неявки за период",
+    "noProcedures": "За период процедур не было.",
+    "method": "Как считается: ночь относится к своей дате, стоимость брони делится поровну на её ночи. Учитываются подтверждённые, текущие и завершённые брони с номером. Поступления считаются по дате оплаты в часовом поясе санатория. Число номеров берётся на сегодня. В отчёте нет персональных данных гостей.",
+    "csv": {
+      "month": "Месяц",
+      "source": "Источник",
+      "bookings": "Брони",
+      "cancelled": "Отменено",
+      "amount": "Сумма",
+      "roomType": "Категория",
+      "rooms": "Номеров",
+      "procedure": "Процедура",
+      "done": "Проведено",
+      "noShow": "Не пришли"
     }
   }
 }
