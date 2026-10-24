@@ -26,6 +26,7 @@ import { RoomsPage } from "@/pages/app/RoomsPage";
 import { GuestsPage } from "@/pages/app/GuestsPage";
 import { BookingsPage } from "@/pages/app/BookingsPage";
 import { CalendarPage } from "@/pages/app/CalendarPage";
+import { FinancePage } from "@/pages/app/FinancePage";
 import { PublicSanatoriumPage } from "@/pages/public/PublicSanatoriumPage";
 import { AdminPage } from "@/pages/admin/AdminPage";
 import { NotFoundState } from "@/components/states/ErrorState";
@@ -75,6 +76,7 @@ export default function App() {
               <Route path="bookings" element={<RequirePermission permission="bookings.read"><BookingsPage /></RequirePermission>} />
               <Route path="calendar" element={<RequirePermission permission="bookings.read"><CalendarPage /></RequirePermission>} />
               <Route path="rooms" element={<RequirePermission permission="rooms.read"><RoomsPage /></RequirePermission>} />
+              <Route path="finance" element={<RequirePermission permission="finance.read"><FinancePage /></RequirePermission>} />
               <Route path="guests" element={<RequirePermission permission="guests.read"><GuestsPage /></RequirePermission>} />
               {upcomingModules.map((m) => (
                 <Route

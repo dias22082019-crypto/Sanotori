@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input, NativeSelect } from "@/components/ui/input";
 import { Dialog } from "@/components/ui/dialog";
+import { BookingPayments } from "@/features/finance/BookingPayments";
 import { invalidateBookings } from "./BookingDialog";
 
 /** Карточка брони с действиями по статусу. Права и правила переходов проверяет set_booking_status() на сервере. */
@@ -93,7 +94,7 @@ export function BookingDetailsDialog({ booking, rooms, roomTypes, onEdit, onClos
         {b.internal_notes && (<><dt className="text-muted-foreground">{t("bookings.fields.internalNotes")}</dt><dd className="whitespace-pre-line">{b.internal_notes}</dd></>)}
         {b.cancel_reason && (<><dt className="text-muted-foreground">{t("bookings.fields.cancelReason")}</dt><dd>{b.cancel_reason}</dd></>)}
       </dl>
-      <p className="mt-3 text-xs text-muted-foreground">{t("bookings.paymentsLater")}</p>
+      {b.status !== "new_request" && <BookingPayments booking={b} />}
 
       {cancelMode ? (
         <div className="mt-5 grid gap-2 rounded-md border p-3">
