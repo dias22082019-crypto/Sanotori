@@ -1,9 +1,10 @@
 import { useDeferredValue, useState } from "react";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Pencil, Plus, Search, UserRound } from "lucide-react";
+import { Pencil, Plus, Search, Stethoscope, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import type { z } from "zod";
 import { supabase } from "@/lib/supabase";
@@ -202,7 +203,7 @@ export function GuestDialog({ value, initialName, initialPhone, onClose, onSaved
 function GuestHistoryDialog({ guest, onClose }: { guest: Guest; onClose: () => void }) {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language === "kk" ? "kk" : "ru") as AppLanguage;
-  const { can } = useOrg();
+  const { org, can } = useOrg();
   const history = useQuery({
     queryKey: ["guest-bookings", guest.id],
     enabled: can("bookings.read"),
@@ -219,6 +220,11 @@ function GuestHistoryDialog({ guest, onClose }: { guest: Guest; onClose: () => v
     <Dialog open onOpenChange={(o) => !o && onClose()} title={guest.full_name} description={[guest.phone && formatKzPhone(guest.phone), guest.email, guest.city].filter(Boolean).join(" · ") || undefined}>
       {guest.birth_date && <p className="text-sm">{t("guests.fields.birthDate")}: {formatDate(guest.birth_date, lang)}</p>}
       {guest.notes && <p className="mt-2 whitespace-pre-line rounded-md bg-muted p-3 text-sm">{guest.notes}</p>}
+      {can("medical.read") && (
+        <Button asChild variant="outline" size="sm" className="mt-3">
+          <Link to={`/app/${org.slug}/medical/${guest.id}`}><Stethoscope /> {t("medical.openCard")}</Link>
+        </Button>
+      )}
       {can("bookings.read") && (
         <>
           <h3 className="mt-4 text-sm font-semibold">{t("guests.history")}</h3>

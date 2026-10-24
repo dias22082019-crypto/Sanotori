@@ -26,9 +26,11 @@ export function invalidateProcedures(qc: ReturnType<typeof useQueryClient>, tena
  * Запись гостя на процедуру или перенос записи. Цену, длительность, пересечения и даты проживания
  * проверяет сервер (schedule_procedure / reschedule_procedure); здесь цена только показывается.
  */
-export function ScheduleProcedureDialog({ guest, bookingId, defaultDate, appointment, onClose }: {
+export function ScheduleProcedureDialog({ guest, bookingId, defaultTypeId, defaultDate, appointment, onClose }: {
   guest?: { id: string; full_name: string };
   bookingId?: string;
+  /** Процедура, выбранная заранее (запись по назначению врача) */
+  defaultTypeId?: string;
   defaultDate: string;
   appointment?: Appointment;
   onClose: () => void;
@@ -47,7 +49,7 @@ export function ScheduleProcedureDialog({ guest, bookingId, defaultDate, appoint
   const [search, setSearch] = useState("");
   const found = useGuestSearch(org.id, search, !picked && search.trim().length >= 2);
 
-  const [typeId, setTypeId] = useState(appointment?.procedure_type_id ?? "");
+  const [typeId, setTypeId] = useState(appointment?.procedure_type_id ?? defaultTypeId ?? "");
   const [date, setDate] = useState(appointment ? dateInTimeZone(appointment.starts_at, tz) : defaultDate);
   const [time, setTime] = useState(appointment ? formatTime(appointment.starts_at, "ru", tz) : "10:00");
   const [roomId, setRoomId] = useState(appointment?.treatment_room_id ?? "");
