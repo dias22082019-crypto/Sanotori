@@ -50,14 +50,14 @@ export function WorkToday() {
   if (tiles.length === 0) return null;
 
   return (
-    <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
       {tiles.map((tile) => (
         <Link key={tile.key} to={tile.to} className="rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           <Card className="h-full transition-colors hover:bg-muted/40">
             <CardContent className="pt-5">
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="flex items-start justify-between gap-2 text-sm text-muted-foreground">
                 {t(`dashboard.work.${tile.key}`)}
-                <tile.icon className="h-4 w-4" />
+                <tile.icon className="mt-0.5 h-4 w-4 shrink-0" />
               </div>
               <p className="mt-2 text-2xl font-semibold tabular-nums">{tile.value ?? "…"}</p>
             </CardContent>

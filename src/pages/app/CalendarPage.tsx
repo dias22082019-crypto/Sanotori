@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { BedDouble, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { todayInTimeZone, type AppLanguage } from "@/lib/format";
+import { formatMonthYear, formatWeekdayShort, todayInTimeZone, type AppLanguage } from "@/lib/format";
 import { BOOKING_SELECT, OCCUPYING_STATUSES, addDays, dateRange, diffDays, type Booking, type BookingStatus } from "@/lib/bookings";
 import { cn } from "@/lib/utils";
 import { useOrg } from "@/auth/OrgProvider";
@@ -72,8 +72,6 @@ export function CalendarPage() {
   const [editing, setEditing] = useState<Booking | null>(null);
   const canCreate = can("bookings.write") && writable;
 
-  const dayFmt = new Intl.DateTimeFormat(lang === "kk" ? "kk-KZ" : "ru-RU", { weekday: "short", timeZone: "UTC" });
-  const monthFmt = new Intl.DateTimeFormat(lang === "kk" ? "kk-KZ" : "ru-RU", { month: "long", year: "numeric", timeZone: "UTC" });
   const asDate = (iso: string) => new Date(`${iso}T00:00:00Z`);
 
   if (types.error || rooms.error || bookings.error) {
@@ -90,7 +88,7 @@ export function CalendarPage() {
 
   return (
     <>
-      <PageHeader title={t("calendar.title")} description={monthFmt.format(asDate(start))} />
+      <PageHeader title={t("calendar.title")} description={formatMonthYear(start, lang)} />
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Button variant="outline" size="icon" aria-label={t("calendar.prev")} onClick={() => setStart(addDays(start, -7))}><ChevronLeft /></Button>
@@ -125,7 +123,7 @@ export function CalendarPage() {
                   <div key={d} style={{ width: CELL }}
                     className={cn("shrink-0 border-r py-1.5 text-center", (wd === 0 || wd === 6) && "bg-muted/60", d === today && "bg-accent font-semibold text-accent-foreground")}>
                     <div className="text-sm">{Number(d.slice(8, 10))}</div>
-                    <div className="text-[10px] uppercase text-muted-foreground">{dayFmt.format(asDate(d))}</div>
+                    <div className="text-[10px] uppercase text-muted-foreground">{formatWeekdayShort(d, lang)}</div>
                   </div>
                 );
               })}

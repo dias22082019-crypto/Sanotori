@@ -97,7 +97,30 @@ export function BookingsPage() {
       ) : (
         <Card>
           <CardContent className="pt-5">
-            <div className="-mx-5 overflow-x-auto">
+            {/* Телефон: карточки вместо широкой таблицы */}
+            <ul className="-mx-5 -mt-5 divide-y md:hidden">
+              {bookings.data!.map((b) => (
+                <li key={b.id}>
+                  <button type="button" className="grid w-full gap-1 px-5 py-3 text-left hover:bg-muted/50" onClick={() => setOpenId(b.id)}>
+                    <span className="flex items-start justify-between gap-3">
+                      <span className="font-medium">{b.guest?.full_name}</span>
+                      <Badge variant={bookingStatusVariant[b.status]}>{t(`bookings.status.${b.status}`)}</Badge>
+                    </span>
+                    <span className="text-sm">
+                      {formatDate(b.check_in, lang)} — {formatDate(b.check_out, lang)}
+                      <span className="text-muted-foreground"> · {t("bookings.nights", { count: b.nights })}</span>
+                    </span>
+                    <span className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+                      <span>№{b.number} · {roomNumber(b.room_id) ?? t("bookings.noRoomShort")} · {typeName(b.room_type_id)}</span>
+                      <span className="whitespace-nowrap text-sm">
+                        {seesPayments ? <DueCell value={balances.data?.get(b.id)} lang={lang} /> : <span className="text-foreground">{formatKzt(b.total_amount, lang)}</span>}
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="-mx-5 hidden overflow-x-auto md:block">
               <table className="w-full min-w-[720px] text-sm">
                 <thead>
                   <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">

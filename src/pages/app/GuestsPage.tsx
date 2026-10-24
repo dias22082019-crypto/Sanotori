@@ -102,7 +102,7 @@ export function GuestsPage() {
                   {guests.data!.map((g) => (
                     <tr key={g.id} className="cursor-pointer hover:bg-muted/50" onClick={() => setViewing(g)}>
                       <td className="px-5 py-2.5 font-medium">{g.full_name}</td>
-                      <td className="px-5 py-2.5">{g.phone ? formatKzPhone(g.phone) : "—"}</td>
+                      <td className="whitespace-nowrap px-5 py-2.5">{g.phone ? formatKzPhone(g.phone) : "—"}</td>
                       <td className="px-5 py-2.5">{g.city ?? "—"}</td>
                       <td className="px-5 py-2.5">{formatDate(g.created_at, lang)}</td>
                       <td className="px-5 py-2.5 text-right">

@@ -129,7 +129,7 @@ export function StaffPage() {
                 <FormField id="invite-role" label={t("staff.inviteRole")}
                   error={form.formState.errors.roleId?.message ? t(form.formState.errors.roleId.message) : undefined}>
                   <NativeSelect id="invite-role" {...form.register("roleId")}>
-                    <option value="" />
+                    <option value="" disabled>{t("staff.chooseRole")}</option>
                     {assignableRoles.map((r) => <option key={r.id} value={r.id}>{roleName(r)}</option>)}
                   </NativeSelect>
                 </FormField>

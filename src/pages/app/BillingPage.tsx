@@ -65,6 +65,8 @@ interface Invoice {
 }
 
 /** Модули тарифа в том порядке, в котором их удобно сравнивать */
+/** Модули тарифа, которые ещё в разработке: показываем честно, с пометкой «скоро» */
+const SOON_FEATURES = new Set(["integrations", "custom_roles", "branches"]);
 const FEATURE_ORDER = ["rooms", "guests", "bookings", "public_site", "finance", "procedures", "tasks", "inventory",
   "analytics", "integrations", "marketing", "custom_roles", "branches"];
 
@@ -208,7 +210,8 @@ export function BillingPage() {
                   </p>
                   <ul className="grid gap-1">
                     {FEATURE_ORDER.filter((f) => codes.has(f)).map((f) => (
-                      <li key={f} className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-success" />{t(`billing.features.${f}`)}</li>
+                      <li key={f} className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-success" />{t(`billing.features.${f}`)}
+                        {SOON_FEATURES.has(f) && <Badge variant="outline" className="text-[10px] font-normal text-muted-foreground">{t("billing.soon")}</Badge>}</li>
                     ))}
                   </ul>
                   <div className="mt-auto pt-2">
