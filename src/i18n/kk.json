@@ -881,7 +881,10 @@
       "review_hidden": "Пікір жасырылды",
       "review_new": "Пікір жаңаларға қайтарылды",
       "promo_code_create": "Промокод жасалды",
-      "promo_code_update": "Промокод өзгертілді"
+      "promo_code_update": "Промокод өзгертілді",
+      "integration_whatsapp_connect": "WhatsApp қосылды",
+      "integration_whatsapp_update": "WhatsApp баптаулары өзгертілді",
+      "integration_whatsapp_disconnect": "WhatsApp ажыратылды"
     },
     "fields": {
       "name": "атауы",
@@ -953,7 +956,13 @@
       "min_nights": "Ең аз түн",
       "max_uses": "Бронь лимиті",
       "rating": "Баға",
-      "replied": "Жауап"
+      "replied": "Жауап",
+      "kaspi_pay_url": "Kaspi сілтемесі",
+      "phone_number_id": "Phone number ID",
+      "waba_id": "WABA ID",
+      "access_token": "қолжетімділік токені",
+      "app_secret": "App Secret",
+      "is_enabled": "қосулы"
     },
     "roles": {
       "owner": "Иесі",
@@ -1360,5 +1369,116 @@
         "text": "Шипажай қазір пікір қабылдамайды."
       }
     }
+  },
+  "messages": {
+    "title": "WhatsApp",
+    "subtitle": "Ресми WhatsApp Business (Cloud API) арқылы қонақтармен хат алмасу",
+    "newChat": "Жаңа диалог",
+    "newChatHint": "Қонаққа алғашқы хабарды тек Meta бекіткен үлгімен жіберуге болады.",
+    "openChat": "Диалогты ашу",
+    "chat": "Хат алмасу",
+    "pick": "Сол жақтан диалогты таңдаңыз",
+    "emptyTitle": "Әзірге хабар жоқ",
+    "emptyText": "WhatsApp баптауларда қосылғанда қонақтардың хабарлары осында шығады.",
+    "noMessages": "Бұл диалогта әлі хабар жоқ",
+    "you": "Сіз",
+    "otherKind": "[тіркеме немесе басқа хабар түрі]",
+    "templateShort": "«{{name}}» үлгісі",
+    "placeholder": "Хабар…",
+    "send": "Жіберу",
+    "windowClosed": "Қонақ 24 сағаттан артық жазбаған. WhatsApp ережесі бойынша қазір тек бекітілген үлгіні жіберуге болады: оның атауы мен тілін көрсетіңіз (мысалы, ru).",
+    "templateName": "Үлгі атауы, мысалы booking_reminder",
+    "templateLang": "Үлгі тілі",
+    "sendTemplate": "Үлгіні жіберу",
+    "openWaMe": "Немесе wa.me арқылы өз телефоныңыздан жазыңыз",
+    "readOnly": "Тек қарау: жіберу үшін «Хабар жіберу» құқығы, қосылған WhatsApp және белсенді жазылым қажет.",
+    "notConnected": "WhatsApp қосылмаған — кіріс хабарлар мен жіберу қолжетімсіз.",
+    "paused": "WhatsApp баптауларда өшірілген — жіберу тоқтатылды.",
+    "toSettings": "Баптауларды ашу",
+    "status": {
+      "queued": "Кезекте",
+      "sending": "Жіберілуде",
+      "sent": "Жіберілді",
+      "delivered": "Жеткізілді",
+      "read": "Оқылды",
+      "failed": "Жіберілмеді",
+      "received": "Алынды"
+    },
+    "errors": {
+      "window": "24 сағаттық терезе жабық: бекітілген үлгіні жіберіңіз.",
+      "notConnected": "WhatsApp қосылмаған немесе баптауларда өшірілген.",
+      "template": "Үлгі табылмады немесе қате көрсетілген. WhatsApp Manager-де атауы мен тілін тексеріңіз.",
+      "phone": "Нөмір WhatsApp-та тіркелмеген немесе қате көрсетілген.",
+      "tooLong": "Хабар 4096 таңбадан ұзын.",
+      "failed": "Meta хабарды қабылдамады: {{error}}"
+    }
+  },
+  "whatsapp": {
+    "title": "WhatsApp Business (Cloud API)",
+    "hint": "Meta арқылы ресми қосылым. Токен мен App Secret Supabase Vault шифрланған қоймасында сақталады және сақталғаннан кейін көрсетілмейді.",
+    "planNote": "WhatsApp интеграциясы «Бизнес» және одан жоғары тарифтерде қолжетімді.",
+    "status": {
+      "not_checked": "Тексерілмеген",
+      "ok": "Қосылған",
+      "error": "Қате"
+    },
+    "paused": "Өшірулі",
+    "number": "Нөмір",
+    "checkedAt": "Тексерілді",
+    "lastError": "Қате",
+    "phoneNumberId": "Phone number ID",
+    "phoneNumberIdHint": "WhatsApp Manager → API Setup, тек сандар",
+    "wabaId": "WhatsApp Business Account ID",
+    "optional": "Міндетті емес",
+    "accessToken": "Тұрақты қолжетімділік токені",
+    "accessTokenHint": "Meta Business жүйелік пайдаланушысының токені",
+    "appSecret": "App Secret",
+    "appSecretHint": "Қосымша баптаулары → Негізгі. Кіріс хабарлардың қолтаңбасын тексеру үшін қажет",
+    "secretKept": "Сақталған. Өзгертпеу үшін бос қалдырыңыз",
+    "enabled": "Хабар жіберу қосулы",
+    "save": "Сақтау",
+    "check": "Қосылымды тексеру",
+    "checking": "Тексерілуде…",
+    "checkOk": "Meta {{phone}} нөмірін растады",
+    "checkFailed": "Тексеру сәтсіз: {{error}}",
+    "disconnect": "Ажырату",
+    "disconnectConfirm": "WhatsApp ажыратылсын ба? Токен мен App Secret жойылады, хат алмасу сақталады.",
+    "disconnected": "WhatsApp ажыратылды",
+    "webhookTitle": "Meta үшін вебхук",
+    "webhookUrl": "Callback URL",
+    "verifyToken": "Verify token",
+    "webhookHint": "Бұл мәндерді Meta қосымшасының баптауларына (WhatsApp → Configuration) қойып, messages өрісіне жазылыңыз.",
+    "noAppSecret": "App Secret болмаса, кіріс хабарлар қабылданбайды: Meta қолтаңбасын тексеру мүмкін емес.",
+    "howTo": "Қалай қосу керек",
+    "steps": [
+      "developers.facebook.com сайтында Meta Business және Business түріндегі қосымша жасап, WhatsApp өнімін қосыңыз.",
+      "WhatsApp Manager-де санаторий нөмірін қосып, растаңыз, Phone number ID мен WhatsApp Business Account ID көшіріңіз.",
+      "Business Settings-те жүйелік пайдаланушы жасап, оған қосымша мен WhatsApp аккаунтына қолжетімділік беріңіз және whatsapp_business_messaging, whatsapp_business_management құқықтары бар тұрақты токен шығарыңыз.",
+      "Қосымша баптауларынан App Secret көшіріп, бәрін осында сақтаңыз.",
+      "«Қосылымды тексеру» батырмасын басыңыз, содан кейін Webhooks бөлімінде Callback URL мен Verify token көрсетіп, messages өрісіне жазылыңыз.",
+      "Хабар үлгілері (еске салу, растау) WhatsApp Manager-де жасалып, бекітіледі."
+    ],
+    "metaDocs": "Meta құжаттамасы",
+    "errors": {
+      "ids": "ID тек сандармен көрсетіледі (5–25 таңба).",
+      "credentials": "Токен немесе App Secret қате сияқты. Оларды Meta кабинетінен қайта көшіріңіз.",
+      "tokenRequired": "Алғашқы қосылым үшін қолжетімділік токені қажет.",
+      "duplicate": "Бұл нөмір басқа санаторийге қосылған.",
+      "token": "Meta токенді қабылдамады: оның мерзімі өткен немесе қажетті құқықтары жоқ.",
+      "function": "whatsapp серверлік функциясы табылмады. Оны Supabase-те орналастырыңыз (README қараңыз).",
+      "migration": "20261030000012_whatsapp_kaspi.sql дерекқор жаңартуын қолдану керек."
+    }
+  },
+  "kaspi": {
+    "settingsTitle": "Kaspi арқылы төлем",
+    "settingsHint": "Kaspi Business (Kaspi Pay) төлем сілтемесі немесе QR. Қызметкерлер оны брондаудан қонаққа жібере алады. Kaspi-дің ашық төлем API-і жоқ, сондықтан төлемнің түскені қолмен белгіленеді.",
+    "urlLabel": "Kaspi төлем сілтемесі",
+    "urlInvalid": "kaspi.kz доменіндегі https сілтемесі қажет",
+    "needsUpdate": "Өріс 20261030000012_whatsapp_kaspi.sql дерекқор жаңартуы қолданылғаннан кейін жұмыс істейді.",
+    "bookingTitle": "Kaspi арқылы төлем",
+    "messageText": "Сәлеметсіз бе! {{name}}, №{{number}} бронь. Төлеуге: {{amount}}.\nKaspi арқылы төлеу: {{url}}",
+    "copyMessage": "Хабарды көшіру",
+    "sendWaMe": "WhatsApp-қа жіберу",
+    "manualNote": "Ақша Kaspi Business-ке түскенде, төлемді «Kaspi аударым» тәсілімен қолмен белгілеңіз."
   }
 }

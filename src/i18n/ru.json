@@ -895,7 +895,10 @@
       "review_hidden": "Отзыв скрыт",
       "review_new": "Отзыв возвращён в новые",
       "promo_code_create": "Промокод создан",
-      "promo_code_update": "Промокод изменён"
+      "promo_code_update": "Промокод изменён",
+      "integration_whatsapp_connect": "WhatsApp подключён",
+      "integration_whatsapp_update": "Настройки WhatsApp изменены",
+      "integration_whatsapp_disconnect": "WhatsApp отключён"
     },
     "fields": {
       "name": "название",
@@ -967,7 +970,13 @@
       "min_nights": "Минимум ночей",
       "max_uses": "Лимит броней",
       "rating": "Оценка",
-      "replied": "Ответ"
+      "replied": "Ответ",
+      "kaspi_pay_url": "ссылка Kaspi",
+      "phone_number_id": "Phone number ID",
+      "waba_id": "WABA ID",
+      "access_token": "токен доступа",
+      "app_secret": "App Secret",
+      "is_enabled": "включено"
     },
     "roles": {
       "owner": "Владелец",
@@ -1396,5 +1405,116 @@
         "text": "Санаторий сейчас не принимает отзывы."
       }
     }
+  },
+  "messages": {
+    "title": "WhatsApp",
+    "subtitle": "Переписка с гостями через официальный WhatsApp Business (Cloud API)",
+    "newChat": "Новый диалог",
+    "newChatHint": "Первое сообщение гостю можно отправить только утверждённым шаблоном Meta.",
+    "openChat": "Открыть диалог",
+    "chat": "Переписка",
+    "pick": "Выберите диалог слева",
+    "emptyTitle": "Сообщений пока нет",
+    "emptyText": "Здесь появятся сообщения гостей, когда WhatsApp будет подключён в настройках.",
+    "noMessages": "В этом диалоге ещё нет сообщений",
+    "you": "Вы",
+    "otherKind": "[вложение или другой тип сообщения]",
+    "templateShort": "Шаблон «{{name}}»",
+    "placeholder": "Сообщение…",
+    "send": "Отправить",
+    "windowClosed": "Гость не писал больше 24 часов. По правилам WhatsApp сейчас можно отправить только утверждённый шаблон: укажите его имя и язык (например, ru).",
+    "templateName": "Имя шаблона, например booking_reminder",
+    "templateLang": "Язык шаблона",
+    "sendTemplate": "Отправить шаблон",
+    "openWaMe": "Или написать со своего телефона через wa.me",
+    "readOnly": "Только просмотр: для отправки нужны право «Отправка сообщений», подключённый WhatsApp и активная подписка.",
+    "notConnected": "WhatsApp не подключён — входящие и отправка недоступны.",
+    "paused": "WhatsApp отключён в настройках — отправка приостановлена.",
+    "toSettings": "Открыть настройки",
+    "status": {
+      "queued": "В очереди",
+      "sending": "Отправляется",
+      "sent": "Отправлено",
+      "delivered": "Доставлено",
+      "read": "Прочитано",
+      "failed": "Не отправлено",
+      "received": "Получено"
+    },
+    "errors": {
+      "window": "Окно 24 часа закрыто: отправьте утверждённый шаблон.",
+      "notConnected": "WhatsApp не подключён или отключён в настройках.",
+      "template": "Шаблон не найден или указан неверно. Проверьте имя и язык в WhatsApp Manager.",
+      "phone": "Номер не зарегистрирован в WhatsApp или указан неверно.",
+      "tooLong": "Сообщение длиннее 4096 символов.",
+      "failed": "Meta не приняла сообщение: {{error}}"
+    }
+  },
+  "whatsapp": {
+    "title": "WhatsApp Business (Cloud API)",
+    "hint": "Официальное подключение через Meta. Токен и App Secret хранятся в зашифрованном хранилище Supabase Vault и не показываются после сохранения.",
+    "planNote": "Интеграции WhatsApp доступны на тарифе «Бизнес» и выше.",
+    "status": {
+      "not_checked": "Не проверено",
+      "ok": "Подключено",
+      "error": "Ошибка"
+    },
+    "paused": "Выключено",
+    "number": "Номер",
+    "checkedAt": "Проверено",
+    "lastError": "Ошибка",
+    "phoneNumberId": "Phone number ID",
+    "phoneNumberIdHint": "WhatsApp Manager → API Setup, только цифры",
+    "wabaId": "WhatsApp Business Account ID",
+    "optional": "Необязательно",
+    "accessToken": "Постоянный токен доступа",
+    "accessTokenHint": "Токен системного пользователя Meta Business",
+    "appSecret": "App Secret",
+    "appSecretHint": "Настройки приложения → Основное. Нужен для проверки подписи входящих сообщений",
+    "secretKept": "Сохранён. Оставьте пустым, чтобы не менять",
+    "enabled": "Отправка сообщений включена",
+    "save": "Сохранить",
+    "check": "Проверить подключение",
+    "checking": "Проверяем…",
+    "checkOk": "Meta подтвердила номер {{phone}}",
+    "checkFailed": "Проверка не прошла: {{error}}",
+    "disconnect": "Отключить",
+    "disconnectConfirm": "Отключить WhatsApp? Токен и App Secret будут удалены, переписка сохранится.",
+    "disconnected": "WhatsApp отключён",
+    "webhookTitle": "Вебхук для Meta",
+    "webhookUrl": "Callback URL",
+    "verifyToken": "Verify token",
+    "webhookHint": "Вставьте эти значения в настройках приложения Meta (WhatsApp → Configuration) и подпишитесь на поле messages.",
+    "noAppSecret": "Без App Secret входящие сообщения не принимаются: подпись Meta нечем проверить.",
+    "howTo": "Как подключить",
+    "steps": [
+      "Создайте Meta Business и приложение типа Business на developers.facebook.com, добавьте продукт WhatsApp.",
+      "Добавьте и подтвердите номер санатория в WhatsApp Manager, скопируйте Phone number ID и WhatsApp Business Account ID.",
+      "В Business Settings создайте системного пользователя, дайте ему доступ к приложению и аккаунту WhatsApp и выпустите постоянный токен с правами whatsapp_business_messaging и whatsapp_business_management.",
+      "Скопируйте App Secret из настроек приложения и сохраните всё здесь.",
+      "Нажмите «Проверить подключение», затем укажите Callback URL и Verify token в разделе Webhooks и подпишитесь на messages.",
+      "Шаблоны сообщений (напоминания, подтверждения) создаются и утверждаются в WhatsApp Manager."
+    ],
+    "metaDocs": "Документация Meta",
+    "errors": {
+      "ids": "ID указываются только цифрами (5–25 знаков).",
+      "credentials": "Токен или App Secret выглядят неверно. Скопируйте их заново из кабинета Meta.",
+      "tokenRequired": "Для первого подключения нужен токен доступа.",
+      "duplicate": "Этот номер уже подключён к другому санаторию.",
+      "token": "Meta отклонила токен: он истёк или не имеет нужных прав.",
+      "function": "Серверная функция whatsapp не найдена. Разверните её в Supabase (см. README).",
+      "migration": "Нужно применить обновление базы 20261030000012_whatsapp_kaspi.sql."
+    }
+  },
+  "kaspi": {
+    "settingsTitle": "Оплата через Kaspi",
+    "settingsHint": "Ссылка или QR на оплату из Kaspi Business (Kaspi Pay). Сотрудники смогут отправить её гостю из брони. Открытого API платежей у Kaspi нет, поэтому поступление оплаты отмечается вручную.",
+    "urlLabel": "Ссылка на оплату Kaspi",
+    "urlInvalid": "Нужна ссылка https на домене kaspi.kz",
+    "needsUpdate": "Поле заработает после применения обновления базы 20261030000012_whatsapp_kaspi.sql.",
+    "bookingTitle": "Оплата через Kaspi",
+    "messageText": "Здравствуйте! {{name}}, бронь №{{number}}. К оплате: {{amount}}.\nОплатить через Kaspi: {{url}}",
+    "copyMessage": "Скопировать сообщение",
+    "sendWaMe": "Отправить в WhatsApp",
+    "manualNote": "Когда деньги поступят в Kaspi Business, отметьте оплату вручную способом «Kaspi перевод»."
   }
 }

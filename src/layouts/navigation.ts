@@ -43,7 +43,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { key: "finance", path: "finance", icon: Wallet, permission: "finance.read" },
       { key: "analytics", path: "analytics", icon: BarChart3, permission: "reports.read" },
       { key: "inventory", path: "inventory", icon: Package, permission: "inventory.read" },
-      { key: "messages", path: "messages", icon: MessageCircle, permission: "messages.read", stage: 5 },
+      { key: "messages", path: "messages", icon: MessageCircle, permission: "messages.read" },
       { key: "marketing", path: "marketing", icon: Star, permission: "marketing.read" },
     ],
   },

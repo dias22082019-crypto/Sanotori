@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
@@ -80,7 +81,12 @@ export function BookingDetailsDialog({ booking, rooms, roomTypes, onEdit, onClos
           {b.guest?.phone && (
             <span className="ml-2 inline-flex gap-2">
               <a className="text-primary hover:underline" href={`tel:${b.guest.phone}`}>{formatKzPhone(b.guest.phone)}</a>
-              <a className="text-primary hover:underline" href={whatsappLink(b.guest.phone)} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+              {can("messages.read") ? (
+                <Link className="text-primary hover:underline" onClick={onClose}
+                  to={`/app/${org.slug}/messages?${new URLSearchParams({ phone: b.guest.phone, booking: b.id })}`}>{t("messages.chat")}</Link>
+              ) : (
+                <a className="text-primary hover:underline" href={whatsappLink(b.guest.phone)} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+              )}
             </span>
           )}
         </dd>
