@@ -119,6 +119,7 @@ export function BookingPayments({ booking }: { booking: Booking }) {
         <dl className="mt-2 grid grid-cols-[1fr_auto] gap-y-1 text-sm">
           <dt className="text-muted-foreground">{t("finance.accommodation")}</dt><dd className="text-right">{formatKzt(b.accommodation, lang)}</dd>
           {Number(b.extras) > 0 && (<><dt className="text-muted-foreground">{t("finance.extras")}</dt><dd className="text-right">{formatKzt(b.extras, lang)}</dd></>)}
+          {Number(b.procedures ?? 0) > 0 && (<><dt className="text-muted-foreground">{t("finance.procedures")}</dt><dd className="text-right">{formatKzt(b.procedures!, lang)}</dd></>)}
           {seesPayments && (<><dt className="text-muted-foreground">{t("finance.paid")}</dt><dd className="text-right">{formatKzt(b.paid_net, lang)}</dd></>)}
           {seesPayments && (
             <>

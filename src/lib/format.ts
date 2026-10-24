@@ -41,6 +41,30 @@ export function todayInTimeZone(timeZone = DEFAULT_TIMEZONE, now = new Date()): 
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
 
+/** Время ЧЧ:ММ в часовом поясе санатория */
+export function formatTime(iso: string, lang: AppLanguage = "ru", timeZone = DEFAULT_TIMEZONE): string {
+  return new Intl.DateTimeFormat(localeFor(lang), { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(iso));
+}
+
+/** Смещение часового пояса на дату в виде «+05:00» (всегда числом: сборки ICU по-разному пишут UTC) */
+export function zonedOffset(isoDate: string, timeZone = DEFAULT_TIMEZONE): string {
+  const probe = new Date(`${isoDate}T12:00:00Z`);
+  const name = new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "longOffset" })
+    .formatToParts(probe).find((p) => p.type === "timeZoneName")?.value ?? "GMT";
+  const m = /GMT([+-]\d{2}):?(\d{2})?/.exec(name);
+  return m ? `${m[1]}:${m[2] ?? "00"}` : "+00:00";
+}
+
+/** Местные дата и время санатория → ISO с часовым поясом: («2026-10-25», «10:30») → «2026-10-25T10:30:00+05:00» */
+export function zonedDateTime(isoDate: string, time: string, timeZone = DEFAULT_TIMEZONE): string {
+  return `${isoDate}T${time.slice(0, 5)}:00${zonedOffset(isoDate, timeZone)}`;
+}
+
+/** Календарная дата момента времени в часовом поясе санатория */
+export function dateInTimeZone(iso: string, timeZone = DEFAULT_TIMEZONE): string {
+  return todayInTimeZone(timeZone, new Date(iso));
+}
+
 /**
  * Нормализация казахстанского номера в E.164: «8 (701) 123-45-67» → «+77011234567».
  * Возвращает null, если номер не похож на казахстанский.

@@ -36,6 +36,8 @@ export interface BookingBalance {
   refunded: string | number;
   paid_net: string | number;
   balance: string | number;
+  /** Процедуры по брони (запланированные и проведённые); до обновления базы поля может не быть */
+  procedures?: string | number;
 }
 
 export interface ExpenseCategory { id: string; name: string; is_active: boolean }
