@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,12 +17,15 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Logo } from "@/components/Logo";
 import { LoadingScreen } from "@/components/states/LoadingScreen";
 import { ErrorState } from "@/components/states/ErrorState";
+import { ActivatePlanDialog, PlanPrices, PlanRequests, type AdminOrgRef } from "./AdminBilling";
 
 interface AdminOrgRow {
   id: string;
   name: string;
   slug: string;
   city: string | null;
+  phone: string | null;
+  email: string | null;
   created_at: string;
   subscription: OrganizationSubscription[];
 }
@@ -36,6 +40,7 @@ export function AdminPage() {
   const isAdmin = adminQuery.data === true;
   const queryClient = useQueryClient();
   const lang = i18n.language === "kk" ? "kk" : "ru";
+  const [activating, setActivating] = useState<{ org: AdminOrgRef; plan?: string; period?: "monthly" | "yearly" } | null>(null);
 
   const orgs = useQuery({
     queryKey: ["admin-orgs"],
@@ -43,7 +48,7 @@ export function AdminPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("organizations")
-        .select("id, name, slug, city, created_at, subscription:organization_subscriptions(id, status, trial_ends_at, current_period_end, grace_days, plan:subscription_plans(code, name_ru, name_kk))")
+        .select("id, name, slug, city, phone, email, created_at, subscription:organization_subscriptions(id, status, trial_ends_at, current_period_end, grace_days, plan:subscription_plans(code, name_ru, name_kk))")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data as unknown as AdminOrgRow[];
@@ -108,9 +113,11 @@ export function AdminPage() {
                               <td className="px-5 py-2.5">
                                 {sub ? <Badge variant={isSubscriptionWritable(sub) ? "success" : "warning"}>{t(`subscription.status.${sub.status}`)}</Badge> : "—"}
                                 {sub?.status === "trialing" && sub.trial_ends_at && <span className="ml-2 text-xs text-muted-foreground">{formatDate(sub.trial_ends_at, lang)}</span>}
+                                {sub?.status !== "trialing" && sub?.current_period_end && <span className="ml-2 text-xs text-muted-foreground">{formatDate(sub.current_period_end, lang)}</span>}
                               </td>
                               <td className="px-5 py-2.5">{formatDate(r.created_at, lang)}</td>
-                              <td className="px-5 py-2.5 text-right">
+                              <td className="whitespace-nowrap px-5 py-2.5 text-right">
+                                <Button size="sm" variant="outline" className="mr-2" onClick={() => setActivating({ org: r })}>{t("admin.activate")}</Button>
                                 {sub && (sub.status === "suspended" ? (
                                   <Button size="sm" variant="outline" onClick={() => setStatus.mutate({ tenant: r.id, status: "active" })}>{t("admin.resume")}</Button>
                                 ) : (
@@ -126,8 +133,11 @@ export function AdminPage() {
                 )}
               </CardContent>
             </Card>
+            <PlanRequests orgs={rows} onActivate={(org, plan, period) => setActivating({ org, plan, period })} />
+            <PlanPrices />
           </>
         )}
+        {activating && <ActivatePlanDialog {...activating} onClose={() => setActivating(null)} />}
       </main>
     </div>
   );

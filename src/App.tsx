@@ -29,6 +29,8 @@ import { CalendarPage } from "@/pages/app/CalendarPage";
 import { FinancePage } from "@/pages/app/FinancePage";
 import { ProceduresPage } from "@/pages/app/ProceduresPage";
 import { TasksPage } from "@/pages/app/TasksPage";
+import { AuditPage } from "@/pages/app/AuditPage";
+import { BillingPage } from "@/pages/app/BillingPage";
 import { PublicSanatoriumPage } from "@/pages/public/PublicSanatoriumPage";
 import { AdminPage } from "@/pages/admin/AdminPage";
 import { NotFoundState } from "@/components/states/ErrorState";
@@ -82,6 +84,8 @@ export default function App() {
               <Route path="guests" element={<RequirePermission permission="guests.read"><GuestsPage /></RequirePermission>} />
               <Route path="procedures" element={<RequirePermission permission="procedures.read"><ProceduresPage /></RequirePermission>} />
               <Route path="tasks" element={<RequirePermission permission="tasks.read"><TasksPage /></RequirePermission>} />
+              <Route path="audit" element={<RequirePermission permission="audit.read"><AuditPage /></RequirePermission>} />
+              <Route path="billing" element={<RequirePermission permission="billing.manage"><BillingPage /></RequirePermission>} />
               {upcomingModules.map((m) => (
                 <Route
                   key={m.key}
