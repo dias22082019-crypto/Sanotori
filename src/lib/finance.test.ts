@@ -27,6 +27,6 @@ import { zonedDayStart } from "@/pages/app/FinancePage";
 describe("period boundaries", () => {
   it("starts the day in the sanatorium time zone", () => {
     expect(zonedDayStart("2026-10-01", "Asia/Almaty")).toBe("2026-10-01T00:00:00+05:00");
-    expect(zonedDayStart("2026-10-01", "UTC")).toBe("2026-10-01T00:00:00Z");
+    expect(zonedDayStart("2026-10-01", "UTC")).toBe("2026-10-01T00:00:00+00:00");
   });
 });

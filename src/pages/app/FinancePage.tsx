@@ -27,7 +27,7 @@ export function zonedDayStart(isoDate: string, timeZone: string): string {
   const name = new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "longOffset" })
     .formatToParts(probe).find((p) => p.type === "timeZoneName")?.value ?? "GMT";
   const m = /GMT([+-]\d{2}):?(\d{2})?/.exec(name);
-  return `${isoDate}T00:00:00${m ? `${m[1]}:${m[2] ?? "00"}` : "Z"}`;
+  return `${isoDate}T00:00:00${m ? `${m[1]}:${m[2] ?? "00"}` : "+00:00"}`;
 }
 
 interface PaymentRow {
