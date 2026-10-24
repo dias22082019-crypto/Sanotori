@@ -51,6 +51,18 @@ export function BookingsPage() {
     },
   });
 
+  const seesPayments = can("finance.read") || can("payments.accept");
+  const ids = bookings.data?.map((b) => b.id) ?? [];
+  const balances = useQuery({
+    queryKey: ["bookings", org.id, "balances", ids],
+    enabled: seesPayments && ids.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("booking_balances").select("booking_id, balance").in("booking_id", ids);
+      if (error) throw error;
+      return new Map((data ?? []).map((r) => [r.booking_id as string, Number(r.balance)]));
+    },
+  });
+
   const roomNumber = (id: string | null) => rooms.data?.find((r) => r.id === id)?.number;
   const typeName = (id: string) => types.data?.find((x) => x.id === id)?.name ?? "";
   const opened = bookings.data?.find((b) => b.id === openId) ?? null;
@@ -95,6 +107,7 @@ export function BookingsPage() {
                     <th className="px-5 py-2 font-medium">{t("bookings.fields.room")}</th>
                     <th className="px-5 py-2 font-medium">{t("bookings.colStatus")}</th>
                     <th className="px-5 py-2 text-right font-medium">{t("bookings.total")}</th>
+                    {seesPayments && <th className="px-5 py-2 text-right font-medium">{t("finance.due")}</th>}
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -112,6 +125,11 @@ export function BookingsPage() {
                       </td>
                       <td className="px-5 py-2.5"><Badge variant={bookingStatusVariant[b.status]}>{t(`bookings.status.${b.status}`)}</Badge></td>
                       <td className="px-5 py-2.5 text-right whitespace-nowrap">{formatKzt(b.total_amount, lang)}</td>
+                      {seesPayments && (
+                        <td className="px-5 py-2.5 text-right whitespace-nowrap">
+                          <DueCell value={balances.data?.get(b.id)} lang={lang} />
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -129,4 +147,10 @@ export function BookingsPage() {
       )}
     </>
   );
+}
+
+function DueCell({ value, lang }: { value: number | undefined; lang: AppLanguage }) {
+  if (value === undefined) return <span className="text-muted-foreground">…</span>;
+  if (value === 0) return <span className="text-success">0 ₸</span>;
+  return <span className={value > 0 ? "font-medium text-destructive" : "text-warning"}>{value < 0 ? "−" : ""}{formatKzt(Math.abs(value), lang)}</span>;
 }
