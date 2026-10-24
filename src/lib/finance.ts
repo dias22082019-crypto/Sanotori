@@ -38,6 +38,8 @@ export interface BookingBalance {
   balance: string | number;
   /** Процедуры по брони (запланированные и проведённые); до обновления базы поля может не быть */
   procedures?: string | number;
+  /** Скидка по промокоду, уже вычтенная из проживания */
+  discount?: string | number;
 }
 
 export interface ExpenseCategory { id: string; name: string; is_active: boolean }
