@@ -106,8 +106,8 @@ export function useTreatmentRooms(tenantId: string, enabled = true) {
   });
 }
 
-/** Сотрудники с правом: специалисты процедур (procedures.status) или исполнители задач (tasks.read) */
-export function useStaff(tenantId: string, permission: "procedures.status" | "tasks.read") {
+/** Сотрудники с правом: специалисты процедур (procedures.status), исполнители задач (tasks.read) или ответственные за заявки (leads.write) */
+export function useStaff(tenantId: string, permission: "procedures.status" | "tasks.read" | "leads.write") {
   return useQuery({
     queryKey: ["staff-directory", tenantId, permission],
     queryFn: async () => {

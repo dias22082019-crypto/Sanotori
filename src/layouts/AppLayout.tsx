@@ -16,12 +16,14 @@ import {
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Logo } from "@/components/Logo";
 import { ADMIN_ICON, NAV_SECTIONS } from "./navigation";
+import { useLeadCounts } from "@/pages/app/LeadsPage";
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const { t } = useTranslation();
   const { org, can } = useOrg();
   const base = `/app/${org.slug}`;
   const isPlatformAdmin = useIsPlatformAdmin();
+  const leadCounts = useLeadCounts(org.id, can("leads.read"));
 
   return (
     <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
@@ -49,6 +51,10 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                   >
                     <item.icon className="h-4 w-4 shrink-0" />
                     <span className="truncate">{t(`nav.${item.key}`)}</span>
+                    {item.key === "leads" && (leadCounts.data?.new ?? 0) > 0 && (
+                      <span className="ml-auto rounded-full bg-primary px-1.5 text-[10px] font-medium text-primary-foreground"
+                        aria-label={t("leads.countNew", { count: leadCounts.data!.new })}>{leadCounts.data!.new}</span>
+                    )}
                     {item.stage && (
                       <span className="ml-auto rounded bg-muted px-1.5 text-[10px] text-muted-foreground">{item.stage}</span>
                     )}

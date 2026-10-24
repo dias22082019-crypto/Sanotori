@@ -14,6 +14,7 @@ import {
 } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { useOrg } from "@/auth/OrgProvider";
+import { useOpenLeadByPhone } from "./LeadsPage";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -155,10 +156,11 @@ function StatusIcon({ status }: { status: MessageStatus }) {
 function Conversation(props: { phone: string; thread?: MessageThread; canSend: boolean; bookingId: string | null; onBack: () => void }) {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language === "kk" ? "kk" : "ru") as AppLanguage;
-  const { org } = useOrg();
+  const { org, can } = useOrg();
   const qc = useQueryClient();
   const bottom = useRef<HTMLDivElement>(null);
   const { phone, thread } = props;
+  const lead = useOpenLeadByPhone(org.id, phone, can("leads.read"));
 
   const messages = useQuery({
     queryKey: ["messages", org.id, phone],
@@ -195,6 +197,11 @@ function Conversation(props: { phone: string; thread?: MessageThread; canSend: b
           <p className="truncate font-medium">{contactTitle(thread, phone)}</p>
           <p className="text-xs text-muted-foreground">{formatKzPhone(phone)}</p>
         </div>
+        {lead.data && (
+          <Link className="shrink-0 text-xs text-primary hover:underline" to={`/app/${org.slug}/leads?lead=${lead.data.id}`}>
+            {t("leads.linkShort", { number: lead.data.number })}
+          </Link>
+        )}
         <a className="shrink-0 text-xs text-primary hover:underline" href={whatsappLink(phone)} target="_blank" rel="noopener noreferrer">wa.me</a>
       </div>
 
