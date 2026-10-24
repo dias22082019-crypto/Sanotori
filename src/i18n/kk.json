@@ -884,7 +884,11 @@
       "promo_code_update": "Промокод өзгертілді",
       "integration_whatsapp_connect": "WhatsApp қосылды",
       "integration_whatsapp_update": "WhatsApp баптаулары өзгертілді",
-      "integration_whatsapp_disconnect": "WhatsApp ажыратылды"
+      "integration_whatsapp_disconnect": "WhatsApp ажыратылды",
+      "lead_create": "Өтінім жасалды",
+      "lead_update": "Өтінім өзгертілді",
+      "lead_status": "Өтінім мәртебесі",
+      "lead_convert": "Өтінім бойынша бронь"
     },
     "fields": {
       "name": "атауы",
@@ -962,7 +966,15 @@
       "waba_id": "WABA ID",
       "access_token": "қолжетімділік токені",
       "app_secret": "App Secret",
-      "is_enabled": "қосулы"
+      "is_enabled": "қосулы",
+      "room_type": "санат",
+      "dates": "күндер",
+      "guests": "қонақтар",
+      "interest": "қызығушылық",
+      "comment": "пікір",
+      "next_contact_at": "байланыс күні",
+      "assignee": "жауапты",
+      "booking": "бронь"
     },
     "roles": {
       "owner": "Иесі",
@@ -1480,5 +1492,90 @@
     "copyMessage": "Хабарды көшіру",
     "sendWaMe": "WhatsApp-қа жіберу",
     "manualNote": "Ақша Kaspi Business-ке түскенде, төлемді «Kaspi аударым» тәсілімен қолмен белгілеңіз."
+  },
+  "leads": {
+    "title": "Өтінімдер",
+    "subtitle": "Броньға дейінгі өтініштер: қоңыраулар, WhatsApp, сайт. Кім жауапты және қашан хабарласу керек.",
+    "new": "Жаңа өтінім",
+    "created": "Өтінім жасалды",
+    "editTitle": "№{{number}} өтінім",
+    "detailsTitle": "№{{number}} өтінім",
+    "bookingTitle": "№{{number}} өтінім бойынша бронь",
+    "linkShort": "№{{number}} өтінім",
+    "countNew_one": "{{count}} жаңа",
+    "countNew_other": "{{count}} жаңа",
+    "countOverdue_one": "{{count}} хабарласу уақыты келді",
+    "countOverdue_other": "{{count}} хабарласу уақыты келді",
+    "tabs": {
+      "open": "Ашық",
+      "won": "Бронь",
+      "lost": "Бас тарту",
+      "all": "Барлығы"
+    },
+    "status": {
+      "new": "Жаңа",
+      "in_progress": "Жұмыста",
+      "won": "Бронь",
+      "lost": "Бас тарту"
+    },
+    "lostReason": {
+      "price": "Қымбат",
+      "no_dates": "Күндерге орын жоқ",
+      "no_answer": "Жауап бермейді",
+      "competitor": "Басқа санаторийді таңдады",
+      "not_relevant": "Өзекті емес",
+      "booking_cancelled": "Бронь бас тартылды",
+      "other": "Басқа"
+    },
+    "fields": {
+      "contact": "Байланыс",
+      "name": "Аты",
+      "source": "Дереккөз",
+      "wishes": "Тілектер",
+      "interest": "Не қызықтырады",
+      "comment": "Пікір",
+      "assignee": "Жауапты",
+      "nextContact": "Хабарласу",
+      "time": "Уақыты",
+      "status": "Мәртебе",
+      "lostReason": "Бас тарту себебі",
+      "booking": "Бронь"
+    },
+    "search": "Аты, телефон немесе №",
+    "allSources": "Барлық дереккөздер",
+    "onlyMine": "Тек менікі",
+    "unassigned": "Тағайындалмаған",
+    "noName": "Атысыз",
+    "overdue": "уақыты келді",
+    "system": "Жүйе",
+    "guestCard": "Қонақ картасы: {{name}}",
+    "emptyTitle": "Әзірге өтінім жоқ",
+    "emptyFiltered": "Ештеңе табылмады",
+    "emptyText": "Мұнда сайттан келген өтінімдер, жаңа нөмірлерден WhatsApp хабарлары және қызметкерлер қолмен енгізген өтініштер түседі.",
+    "interestPlaceholder": "Емдеу, процедуралар, отбасылық жолдама…",
+    "duplicate": "Бұл нөмірден ашық өтінім бар: {{numbers}}.",
+    "convert": "Бронь рәсімдеу",
+    "confirmBooking": "Броньды растау",
+    "toWork": "Жұмысқа алу",
+    "reopen": "Жұмысқа қайтару",
+    "markLost": "Бас тарту",
+    "lostNote": "Түсініктеме (міндетті емес)",
+    "movedToWork": "Өтінім жұмыста",
+    "markedLost": "Өтінім жабылды: бас тарту",
+    "notesTitle": "Байланыс тарихы",
+    "noNotes": "Әзірге жазба жоқ.",
+    "notePlaceholder": "Қонақ не айтты, не туралы келістік…",
+    "addNote": "Қосу",
+    "errors": {
+      "contact": "Атын немесе телефонын көрсетіңіз.",
+      "dates": "Шығу күні келу күнінен кейін болуы керек.",
+      "guests": "Қонақтар санын тексеріңіз.",
+      "assignee": "Бұл қызметкер өтінімдерді жүргізе алмайды.",
+      "closed": "Өтінім жабық. Өзгерту үшін оны жұмысқа қайтарыңыз.",
+      "hasBooking": "Өтінім бойынша бронь бар.",
+      "reason": "Бас тарту себебін таңдаңыз.",
+      "status": "Мәртебені бұлай өзгерту мүмкін емес.",
+      "note": "Жазба мәтінін жазыңыз."
+    }
   }
 }

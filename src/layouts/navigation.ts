@@ -29,7 +29,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { key: "calendar", path: "calendar", icon: CalendarRange, permission: "bookings.read" },
       { key: "rooms", path: "rooms", icon: BedDouble, permission: "rooms.read" },
       { key: "guests", path: "guests", icon: UserRound, permission: "guests.read" },
-      { key: "leads", path: "leads", icon: Inbox, permission: "leads.read", stage: 5 },
+      { key: "leads", path: "leads", icon: Inbox, permission: "leads.read" },
       { key: "tasks", path: "tasks", icon: ClipboardCheck, permission: "tasks.read" },
     ],
   },

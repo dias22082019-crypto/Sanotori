@@ -9,6 +9,7 @@ import {
   BOOKING_SOURCES, addDays, describeBookingError, diffDays,
   type Booking, type BookingSource, type Guest, type Quote, type RoomType,
 } from "@/lib/bookings";
+import { describeLeadError, type Lead } from "@/lib/leads";
 import { useOrg } from "@/auth/OrgProvider";
 import { useGuestSearch, GuestDialog } from "@/pages/app/GuestsPage";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,8 @@ interface AvailableRoom { id: string; number: string; floor: string | null; room
 
 /** Сброс кэша всего, что зависит от бронирований */
 export function invalidateBookings(qc: ReturnType<typeof useQueryClient>, tenantId: string) {
-  for (const key of ["bookings", "calendar", "today-summary", "rooms", "available-rooms"]) {
+  // статус брони закрывает связанную заявку, поэтому обновляем и заявки
+  for (const key of ["bookings", "calendar", "today-summary", "rooms", "available-rooms", "leads", "lead-counts"]) {
     void qc.invalidateQueries({ queryKey: [key, tenantId] });
   }
   void qc.invalidateQueries({ queryKey: ["guest-bookings"] });
@@ -36,9 +38,11 @@ export function invalidateBookings(qc: ReturnType<typeof useQueryClient>, tenant
  * Создание или изменение брони. Сумма показывается из quote_booking() и при сохранении
  * пересчитывается сервером: клиент цену не передаёт.
  */
-export function BookingDialog({ booking, preset, roomTypes, onClose }: {
+export function BookingDialog({ booking, preset, lead, roomTypes, onClose }: {
   booking?: Booking | null;
   preset?: BookingPreset;
+  /** Бронь из заявки: поля заполняются из неё, сохранение идёт через create_booking_from_lead */
+  lead?: Lead | null;
   roomTypes: RoomType[];
   onClose: () => void;
 }) {
@@ -49,15 +53,17 @@ export function BookingDialog({ booking, preset, roomTypes, onClose }: {
   const today = todayInTimeZone(org.timezone);
   const activeTypes = roomTypes.filter((x) => x.is_active || x.id === booking?.room_type_id);
 
-  const [guest, setGuest] = useState<Pick<Guest, "id" | "full_name" | "phone"> | null>(booking?.guest ?? null);
-  const [checkIn, setCheckIn] = useState(booking?.check_in ?? preset?.check_in ?? today);
-  const [checkOut, setCheckOut] = useState(booking?.check_out ?? addDays(preset?.check_in ?? today, 1));
-  const [adults, setAdults] = useState(booking?.adults ?? 1);
-  const [children, setChildren] = useState(booking?.children ?? 0);
-  const [typeId, setTypeId] = useState(booking?.room_type_id ?? preset?.room_type_id ?? activeTypes[0]?.id ?? "");
+  const leadIn = lead?.check_in && lead.check_in >= today ? lead.check_in : undefined;
+  const [guest, setGuest] = useState<Pick<Guest, "id" | "full_name" | "phone"> | null>(booking?.guest ?? lead?.guest ?? null);
+  const [checkIn, setCheckIn] = useState(booking?.check_in ?? preset?.check_in ?? leadIn ?? today);
+  const [checkOut, setCheckOut] = useState(booking?.check_out ?? (leadIn && lead?.check_out ? lead.check_out : addDays(preset?.check_in ?? leadIn ?? today, 1)));
+  const [adults, setAdults] = useState(booking?.adults ?? lead?.adults ?? 1);
+  const [children, setChildren] = useState(booking?.children ?? lead?.children ?? 0);
+  const [typeId, setTypeId] = useState(booking?.room_type_id ?? preset?.room_type_id
+    ?? (lead?.room_type_id && activeTypes.some((x) => x.id === lead.room_type_id) ? lead.room_type_id : undefined) ?? activeTypes[0]?.id ?? "");
   const [roomId, setRoomId] = useState(booking?.room_id ?? preset?.room_id ?? "");
-  const [source, setSource] = useState<BookingSource>(booking?.source ?? "phone");
-  const [comment, setComment] = useState(booking?.guest_comment ?? "");
+  const [source, setSource] = useState<BookingSource>(booking?.source ?? lead?.source ?? "phone");
+  const [comment, setComment] = useState(booking?.guest_comment ?? lead?.comment ?? "");
   const [notes, setNotes] = useState(booking?.internal_notes ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -106,7 +112,12 @@ export function BookingDialog({ booking, preset, roomTypes, onClose }: {
     if (overCapacity) return setError(t("bookings.errors.capacity"));
     if (booking && booking.status !== "new_request" && !roomId) return setError(t("bookings.errors.roomRequired"));
     setSaving(true);
-    const { error } = booking
+    const { error } = lead
+      ? await supabase.rpc("create_booking_from_lead", {
+          p_lead_id: lead.id, p_guest_id: guest.id, p_room_type_id: typeId, p_room_id: roomId || null,
+          p_check_in: checkIn, p_check_out: checkOut, p_adults: adults, p_children: children, p_comment: comment || null,
+        })
+      : booking
       ? await supabase.rpc("update_booking", {
           p_booking_id: booking.id, p_room_type_id: typeId, p_room_id: roomId || null, p_check_in: checkIn, p_check_out: checkOut,
           p_adults: adults, p_children: children, p_comment: comment, p_internal_notes: notes,
@@ -117,7 +128,7 @@ export function BookingDialog({ booking, preset, roomTypes, onClose }: {
           p_source: source, p_comment: comment, p_status: roomId ? "confirmed" : "new_request",
         });
     setSaving(false);
-    if (error) return setError(describeBookingError(error, t));
+    if (error) return setError(lead && /lead|permission/.test(error.message) ? describeLeadError(error, t) : describeBookingError(error, t));
     toast.success(booking ? t("common.saved") : roomId ? t("bookings.created") : t("bookings.createdRequest"));
     invalidateBookings(qc, org.id);
     onClose();
@@ -125,12 +136,12 @@ export function BookingDialog({ booking, preset, roomTypes, onClose }: {
 
   return (
     <Dialog open onOpenChange={(o) => !o && onClose()} className="max-w-xl"
-      title={booking ? t("bookings.editTitle", { number: booking.number }) : t("bookings.newTitle")}>
+      title={booking ? t("bookings.editTitle", { number: booking.number }) : lead ? t("leads.bookingTitle", { number: lead.number }) : t("bookings.newTitle")}>
       <div className="grid gap-3">
         {booking ? (
           <p className="text-sm"><span className="text-muted-foreground">{t("bookings.fields.guest")}:</span> <span className="font-medium">{booking.guest?.full_name}</span></p>
         ) : (
-          <GuestPicker value={guest} onChange={setGuest} />
+          <GuestPicker value={guest} onChange={setGuest} initialName={lead?.full_name ?? undefined} initialPhone={lead?.phone ?? undefined} />
         )}
 
         <div className="grid grid-cols-2 gap-3">
@@ -166,7 +177,7 @@ export function BookingDialog({ booking, preset, roomTypes, onClose }: {
           </FormField>
         </div>
 
-        {!booking && (
+        {!booking && !lead && (
           <FormField id="b-source" label={t("bookings.fields.source")}>
             <NativeSelect id="b-source" value={source} onChange={(e) => setSource(e.target.value as BookingSource)}>
               {BOOKING_SOURCES.map((s) => <option key={s} value={s}>{t(`bookings.source.${s}`)}</option>)}
@@ -202,13 +213,15 @@ export function BookingDialog({ booking, preset, roomTypes, onClose }: {
   );
 }
 
-function GuestPicker({ value, onChange }: {
+function GuestPicker({ value, onChange, initialName, initialPhone }: {
   value: Pick<Guest, "id" | "full_name" | "phone"> | null;
   onChange: (g: Pick<Guest, "id" | "full_name" | "phone"> | null) => void;
+  initialName?: string;
+  initialPhone?: string;
 }) {
   const { t } = useTranslation();
   const { org, can } = useOrg();
-  const [term, setTerm] = useState("");
+  const [term, setTerm] = useState(initialPhone ?? initialName ?? "");
   const [creating, setCreating] = useState(false);
   const enabled = term.trim().length >= 2;
   const results = useGuestSearch(org.id, term, enabled);
@@ -250,7 +263,7 @@ function GuestPicker({ value, onChange }: {
         </ul>
       )}
       {creating && (
-        <GuestDialog value={null} initialName={/\d/.test(term) ? "" : term} onClose={() => setCreating(false)} onSaved={(g) => onChange(g)} />
+        <GuestDialog value={null} initialName={/\d/.test(term) ? initialName ?? "" : term} initialPhone={initialPhone} onClose={() => setCreating(false)} onSaved={(g) => onChange(g)} />
       )}
     </div>
   );

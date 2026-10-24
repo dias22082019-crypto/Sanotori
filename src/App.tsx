@@ -35,6 +35,7 @@ import { InventoryPage } from "@/pages/app/InventoryPage";
 import { MarketingPage } from "@/pages/app/MarketingPage";
 import { BillingPage } from "@/pages/app/BillingPage";
 import { MessagesPage } from "@/pages/app/MessagesPage";
+import { LeadsPage } from "@/pages/app/LeadsPage";
 import { PublicSanatoriumPage } from "@/pages/public/PublicSanatoriumPage";
 import { ReviewPage } from "@/pages/public/ReviewPage";
 import { AdminPage } from "@/pages/admin/AdminPage";
@@ -91,6 +92,7 @@ export default function App() {
               <Route path="procedures" element={<RequirePermission permission="procedures.read"><ProceduresPage /></RequirePermission>} />
               <Route path="tasks" element={<RequirePermission permission="tasks.read"><TasksPage /></RequirePermission>} />
               <Route path="inventory" element={<RequirePermission permission="inventory.read"><InventoryPage /></RequirePermission>} />
+              <Route path="leads" element={<RequirePermission permission="leads.read"><LeadsPage /></RequirePermission>} />
               <Route path="messages" element={<RequirePermission permission="messages.read"><MessagesPage /></RequirePermission>} />
               <Route path="marketing" element={<RequirePermission permission="marketing.read"><MarketingPage /></RequirePermission>} />
               <Route path="analytics" element={<RequirePermission permission="reports.read"><AnalyticsPage /></RequirePermission>} />

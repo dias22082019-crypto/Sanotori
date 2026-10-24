@@ -14,7 +14,7 @@ export interface AuditEntry {
 
 /** Группы журнала: префиксы кодов действий */
 export const AUDIT_GROUPS = {
-  bookings: ["booking.", "guest.", "room.status"],
+  bookings: ["booking.", "guest.", "room.status", "lead."],
   finance: ["payment.", "expense.", "expense_category."],
   procedures: ["procedure.", "procedure_type.", "treatment_room."],
   tasks: ["task."],
@@ -46,10 +46,10 @@ function fieldLabel(key: string, t: TFunction): string {
   return label === k ? key : label;
 }
 
-const STATUS_NAMESPACES = ["bookings.status", "procedures.status", "tasks.status", "subscription.status", "rooms.status", "audit.roles"];
+const STATUS_NAMESPACES = ["bookings.status", "procedures.status", "tasks.status", "subscription.status", "rooms.status", "audit.roles", "leads.status"];
 
 /** Поле → пространство переводов его значений */
-const VALUE_NAMESPACES: Record<string, string> = { period: "billing.period", source: "bookings.source", method: "finance.method", category: "inventory.categories", plan: "audit.plans" };
+const VALUE_NAMESPACES: Record<string, string> = { period: "billing.period", source: "bookings.source", method: "finance.method", category: "inventory.categories", plan: "audit.plans", reason: "leads.lostReason" };
 
 function translated(key: string, t: TFunction): string | null {
   const label = t(key);

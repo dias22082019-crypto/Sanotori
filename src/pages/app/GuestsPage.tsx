@@ -134,9 +134,10 @@ export function GuestsPage() {
 }
 
 /** Создание и изменение гостя. Используется также в форме брони. */
-export function GuestDialog({ value, initialName, onClose, onSaved }: {
+export function GuestDialog({ value, initialName, initialPhone, onClose, onSaved }: {
   value: Guest | null;
   initialName?: string;
+  initialPhone?: string;
   onClose: () => void;
   onSaved: (guest: Guest) => void;
 }) {
@@ -146,7 +147,7 @@ export function GuestDialog({ value, initialName, onClose, onSaved }: {
     resolver: zodResolver(guestSchema),
     defaultValues: {
       full_name: value?.full_name ?? initialName ?? "",
-      phone: value?.phone ?? "",
+      phone: value?.phone ?? (initialPhone ? formatKzPhone(initialPhone) : ""),
       email: value?.email ?? "",
       birth_date: value?.birth_date ?? "",
       city: value?.city ?? "",
