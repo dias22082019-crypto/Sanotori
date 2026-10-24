@@ -51,8 +51,8 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { key: "staff", path: "staff", icon: Users, permission: "members.read" },
       { key: "settings", path: "settings", icon: Settings, permission: "settings.manage" },
-      { key: "billing", path: "billing", icon: CreditCard, permission: "billing.manage", stage: 6 },
-      { key: "audit", path: "audit", icon: ScrollText, permission: "audit.read", stage: 6 },
+      { key: "billing", path: "billing", icon: CreditCard, permission: "billing.manage" },
+      { key: "audit", path: "audit", icon: ScrollText, permission: "audit.read" },
     ],
   },
 ];

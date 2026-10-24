@@ -105,15 +105,18 @@ function OrgHeader() {
 
 function SubscriptionBanner() {
   const { t, i18n } = useTranslation();
-  const { subscription, writable } = useOrg();
+  const { org, subscription, writable, can } = useOrg();
   const lang = i18n.language === "kk" ? "kk" : "ru";
+  const billingLink = can("billing.manage") && (
+    <Link to={`/app/${org.slug}/billing`} className="ml-2 font-medium underline underline-offset-2">{t("subscription.manage")}</Link>
+  );
   if (!writable) {
-    return <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-sm text-foreground">{t("subscription.readOnly")}</div>;
+    return <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-sm text-foreground">{t("subscription.readOnly")}{billingLink}</div>;
   }
   if (subscription?.status === "trialing" && subscription.trial_ends_at) {
     return (
       <div className="border-b bg-accent px-4 py-1.5 text-xs text-accent-foreground">
-        {t("subscription.trialUntil", { date: formatDate(subscription.trial_ends_at, lang) })}
+        {t("subscription.trialUntil", { date: formatDate(subscription.trial_ends_at, lang) })}{billingLink}
       </div>
     );
   }
