@@ -31,6 +31,7 @@ import { ProceduresPage } from "@/pages/app/ProceduresPage";
 import { TasksPage } from "@/pages/app/TasksPage";
 import { AuditPage } from "@/pages/app/AuditPage";
 import { AnalyticsPage } from "@/pages/app/AnalyticsPage";
+import { InventoryPage } from "@/pages/app/InventoryPage";
 import { BillingPage } from "@/pages/app/BillingPage";
 import { PublicSanatoriumPage } from "@/pages/public/PublicSanatoriumPage";
 import { AdminPage } from "@/pages/admin/AdminPage";
@@ -85,6 +86,7 @@ export default function App() {
               <Route path="guests" element={<RequirePermission permission="guests.read"><GuestsPage /></RequirePermission>} />
               <Route path="procedures" element={<RequirePermission permission="procedures.read"><ProceduresPage /></RequirePermission>} />
               <Route path="tasks" element={<RequirePermission permission="tasks.read"><TasksPage /></RequirePermission>} />
+              <Route path="inventory" element={<RequirePermission permission="inventory.read"><InventoryPage /></RequirePermission>} />
               <Route path="analytics" element={<RequirePermission permission="reports.read"><AnalyticsPage /></RequirePermission>} />
               <Route path="audit" element={<RequirePermission permission="audit.read"><AuditPage /></RequirePermission>} />
               <Route path="billing" element={<RequirePermission permission="billing.manage"><BillingPage /></RequirePermission>} />

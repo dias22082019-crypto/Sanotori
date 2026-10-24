@@ -18,6 +18,7 @@ export const AUDIT_GROUPS = {
   finance: ["payment.", "expense.", "expense_category."],
   procedures: ["procedure.", "procedure_type.", "treatment_room."],
   tasks: ["task."],
+  inventory: ["inventory."],
   catalog: ["room_type.", "room_rate.", "room.create", "room.update", "room.delete"],
   staff: ["member.", "role.", "organization."],
   settings: ["settings.", "billing.", "admin."],
@@ -47,7 +48,7 @@ function fieldLabel(key: string, t: TFunction): string {
 const STATUS_NAMESPACES = ["bookings.status", "procedures.status", "tasks.status", "subscription.status", "rooms.status", "audit.roles"];
 
 /** Поле → пространство переводов его значений */
-const VALUE_NAMESPACES: Record<string, string> = { period: "billing.period", source: "bookings.source", method: "finance.method" };
+const VALUE_NAMESPACES: Record<string, string> = { period: "billing.period", source: "bookings.source", method: "finance.method", category: "inventory.categories" };
 
 function translated(key: string, t: TFunction): string | null {
   const label = t(key);
