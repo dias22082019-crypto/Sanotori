@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, ArrowLeft, CalendarPlus, ClipboardPlus, Lock, Pencil, Plus, Search, Stethoscope } from "lucide-react";
+import { AlertTriangle, ArrowLeft, CalendarPlus, ClipboardPlus, FileText, Lock, Pencil, Plus, Search, Stethoscope } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { formatDate, formatDateTime, formatKzPhone, todayInTimeZone, zonedDateTime, dateInTimeZone, formatTime, type AppLanguage } from "@/lib/format";
@@ -168,10 +168,11 @@ export function MedicalCardPage() {
           c.guest.city,
           c.stay ? `${t("medical.stay", { number: c.stay.number })}: ${formatDate(c.stay.check_in, lang)} — ${formatDate(c.stay.check_out, lang)}` : null,
         ].filter(Boolean).join(" · ") || undefined}
-        actions={canWrite && record && (
+        actions={record && (
           <>
-            <Button variant="outline" onClick={() => setDialog("rx")}><ClipboardPlus /> {t("medical.addRx")}</Button>
-            <Button onClick={() => setDialog("visit")}><Plus /> {t("medical.addVisit")}</Button>
+            <Button asChild variant="outline"><Link to={`/app/${org.slug}/print/medical/${c.guest.id}`}><FileText /> {t("medical.extract")}</Link></Button>
+            {canWrite && <Button variant="outline" onClick={() => setDialog("rx")}><ClipboardPlus /> {t("medical.addRx")}</Button>}
+            {canWrite && <Button onClick={() => setDialog("visit")}><Plus /> {t("medical.addVisit")}</Button>}
           </>
         )}
       />

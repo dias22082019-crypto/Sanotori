@@ -141,7 +141,7 @@ export function BookingPayments({ booking }: { booking: Booking }) {
           {extras.data!.map((x) => (
             <li key={x.id} className="flex items-center gap-2 px-3 py-1.5">
               <span className="flex-1">{x.name}{Number(x.quantity) !== 1 && <span className="text-muted-foreground"> × {Number(x.quantity)}</span>}</span>
-              <span>{formatKzt(x.amount, lang)}</span>
+              <span className="whitespace-nowrap">{formatKzt(x.amount, lang)}</span>
               {canExtras && active && (
                 <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive" aria-label={t("common.delete")} onClick={() => removeExtra(x.id)}><Trash2 /></Button>
               )}
@@ -154,12 +154,12 @@ export function BookingPayments({ booking }: { booking: Booking }) {
         <ul className="mt-3 divide-y rounded-md border text-sm">
           {payments.data!.map((p) => (
             <li key={p.id} className={cn("px-3 py-1.5", p.voided_at && "text-muted-foreground")}>
-              <div className="flex items-center gap-2">
-                <span className={cn("flex-1", p.voided_at && "line-through")}>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className={cn("min-w-[11rem] flex-1", p.voided_at && "line-through")}>
                   {t(`finance.kind.${p.kind}`)} · {t(`finance.method.${p.method}`)}
                   <span className="ml-2 text-xs text-muted-foreground">{formatDateTime(p.paid_at, lang, org.timezone)}</span>
                 </span>
-                <span className={cn(p.voided_at && "line-through", p.kind === "refund" && "text-warning")}>
+                <span className={cn("whitespace-nowrap", p.voided_at && "line-through", p.kind === "refund" && "text-warning")}>
                   {p.kind === "refund" ? "−" : ""}{formatKzt(p.amount, lang)}
                 </span>
                 {canVoid && !p.voided_at && voiding !== p.id && (

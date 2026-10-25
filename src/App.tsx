@@ -37,6 +37,7 @@ import { BillingPage } from "@/pages/app/BillingPage";
 import { MessagesPage } from "@/pages/app/MessagesPage";
 import { LeadsPage } from "@/pages/app/LeadsPage";
 import { MedicalCardPage, MedicalPage } from "@/pages/app/MedicalPage";
+import { BookingDocumentPage, MedicalExtractPage } from "@/pages/print/PrintPages";
 import { PublicSanatoriumPage } from "@/pages/public/PublicSanatoriumPage";
 import { ReviewPage } from "@/pages/public/ReviewPage";
 import { AdminPage } from "@/pages/admin/AdminPage";
@@ -81,6 +82,8 @@ export default function App() {
             <Route path="/account" element={<RequireAuth><AccountPage /></RequireAuth>} />
             <Route path="/admin" element={<RequireAuth><AdminPage /></RequireAuth>} />
 
+            <Route path="/app/:orgSlug/print/medical/:guestId" element={<RequireAuth><OrgProvider><RequirePermission permission="medical.read"><MedicalExtractPage /></RequirePermission></OrgProvider></RequireAuth>} />
+            <Route path="/app/:orgSlug/print/:kind/:bookingId" element={<RequireAuth><OrgProvider><BookingDocumentPage /></OrgProvider></RequireAuth>} />
             <Route path="/app/:orgSlug" element={<RequireAuth><OrgProvider><AppLayout /></OrgProvider></RequireAuth>}>
               <Route index element={<DashboardPage />} />
               <Route path="settings" element={<RequirePermission permission="settings.manage"><SettingsPage /></RequirePermission>} />
