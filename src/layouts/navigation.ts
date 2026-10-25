@@ -1,6 +1,6 @@
 import {
   BarChart3, BedDouble, CalendarRange, ClipboardList, ClipboardCheck, CreditCard, HeartPulse, Inbox,
-  LayoutDashboard, MessageCircle, Package, ScrollText, Settings, Star, Users, Wallet, UserRound,
+  LayoutDashboard, MessageCircle, Package, ScrollText, Settings, Star, Stethoscope, Users, Wallet, UserRound,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Permission } from "@/lib/types";
@@ -35,7 +35,10 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     key: "sectionMedical",
-    items: [{ key: "procedures", path: "procedures", icon: HeartPulse, permission: "procedures.read" }],
+    items: [
+      { key: "medical", path: "medical", icon: Stethoscope, permission: "medical.read" },
+      { key: "procedures", path: "procedures", icon: HeartPulse, permission: "procedures.read" },
+    ],
   },
   {
     key: "sectionBusiness",
