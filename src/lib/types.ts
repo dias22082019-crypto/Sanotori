@@ -80,6 +80,6 @@ export type Permission =
   | "bookings.read" | "bookings.write" | "bookings.checkin" | "bookings.cancel"
   | "leads.read" | "leads.write" | "finance.read" | "finance.write" | "payments.accept" | "refunds.create"
   | "reports.read" | "procedures.read" | "procedures.write" | "procedures.status"
-  | "medical.read" | "medical.write" | "inventory.read" | "inventory.write"
+  | "medical.read" | "medical.write" | "inventory.read" | "inventory.write" | "kitchen.read" | "kitchen.write"
   | "tasks.read" | "tasks.write" | "staff.read" | "staff.write"
   | "messages.read" | "messages.send" | "marketing.read" | "marketing.write";

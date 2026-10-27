@@ -19,6 +19,7 @@ export const AUDIT_GROUPS = {
   procedures: ["procedure.", "procedure_type.", "treatment_room."],
   medical: ["medical."],
   tasks: ["task."],
+  kitchen: ["diet_type.", "diet.", "menu."],
   inventory: ["inventory."],
   marketing: ["review.", "promo_code."],
   catalog: ["room_type.", "room_rate.", "room.create", "room.update", "room.delete"],
@@ -50,7 +51,7 @@ function fieldLabel(key: string, t: TFunction): string {
 const STATUS_NAMESPACES = ["bookings.status", "procedures.status", "tasks.status", "subscription.status", "rooms.status", "audit.roles", "leads.status", "medical.rxStatus"];
 
 /** Поле → пространство переводов его значений */
-const VALUE_NAMESPACES: Record<string, string> = { period: "billing.period", source: "bookings.source", method: "finance.method", category: "inventory.categories", plan: "audit.plans", reason: "leads.lostReason", visit_kind: "medical.kind", document: "documents.kind" };
+const VALUE_NAMESPACES: Record<string, string> = { period: "billing.period", source: "bookings.source", method: "finance.method", category: "inventory.categories", plan: "audit.plans", reason: "leads.lostReason", visit_kind: "medical.kind", document: "documents.kind", meal: "kitchen.meals" };
 
 function translated(key: string, t: TFunction): string | null {
   const label = t(key);
