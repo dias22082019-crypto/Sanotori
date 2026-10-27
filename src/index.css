@@ -39,3 +39,12 @@
   html { -webkit-text-size-adjust: 100%; }
   body { @apply bg-background text-foreground antialiased; font-feature-settings: "cv11", "tnum"; }
 }
+
+/* Печать документов: лист A4, на бумаге только документ */
+@media print {
+  @page { size: A4; margin: 15mm; }
+  body { background: #fff; }
+}
+.doc-table th, .doc-table td { border: 1px solid #000; padding: 3px 5px; vertical-align: top; }
+.doc-table th { font-weight: 600; background: #f3f4f6; }
+@media print { .doc-table th { background: transparent; } }

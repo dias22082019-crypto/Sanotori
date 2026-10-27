@@ -30,6 +30,14 @@ export interface Organization {
   is_published: boolean;
   /** Ссылка на оплату из Kaspi Business (миграция 0012); до её применения поля нет */
   kaspi_pay_url?: string | null;
+  /** Реквизиты для документов (миграция 0015); до её применения полей нет */
+  legal_address?: string | null;
+  bank_name?: string | null;
+  iik?: string | null;
+  bik?: string | null;
+  director_name?: string | null;
+  vat_rate?: number | null;
+  contract_terms?: string | null;
 }
 
 export interface OrganizationSubscription {

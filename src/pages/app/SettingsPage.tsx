@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { appUrl } from "@/lib/utils";
 import { FormField } from "@/components/ui/form-field";
 import { WhatsappSettingsCard } from "@/features/messages/WhatsappSettingsCard";
+import { DocumentSettingsCard } from "@/features/documents/DocumentSettingsCard";
 
 type Output = z.output<typeof organizationSettingsSchema>;
 
@@ -171,6 +172,7 @@ export function SettingsPage() {
           )}
         </fieldset>
       </form>
+      <DocumentSettingsCard />
       <WhatsappSettingsCard />
     </>
   );
