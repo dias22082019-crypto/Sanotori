@@ -26,6 +26,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/states/EmptyState";
 import { ErrorState } from "@/components/states/ErrorState";
 import { ScheduleProcedureDialog } from "@/features/procedures/ScheduleProcedureDialog";
+import { StayDietCard } from "@/pages/app/KitchenPage";
 
 /** Медкарты: гости в санатории и сегодняшние заезды, поиск гостя */
 export function MedicalPage() {
@@ -218,6 +219,8 @@ export function MedicalCardPage() {
               )}
             </CardContent>
           </Card>
+
+          {c.stay && <StayDietCard bookingId={c.stay.id} guestName={c.guest.full_name} />}
 
           <Card>
             <CardHeader><CardTitle className="text-base">{t("medical.prescriptions")}</CardTitle></CardHeader>
